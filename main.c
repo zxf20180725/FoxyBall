@@ -2,8 +2,8 @@
 #include<stdio.h>
 #include<malloc.h>
 #include<stdlib.h>
-#include"func.h"
-#include"ArrayLib.h"
+#include"hashmap.h"
+#include"arraylib.h"
 
 
 int main()
@@ -11,7 +11,8 @@ int main()
 	char *key[]={
 		"key1","狡猾的皮球","狡猾的球球",
 		"key4","foxyball","2018bf05a16eb3749b3e91397309035506e0f8ff",
-		"b765a065d8e64dec67daa4506a7bbd1a9d6401d2","卧槽","冲突测试"
+		"b765a065d8e64dec67daa4506a7bbd1a9d6401d2","卧槽","冲突测试",
+		"key1"
 	};
 	int len=sizeof(key)/sizeof(char*);
 	int i =0;

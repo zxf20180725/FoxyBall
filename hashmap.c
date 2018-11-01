@@ -1,7 +1,7 @@
 ﻿#include<malloc.h>
 #include <string.h>
-#include"func.h"
-#include"ArrayLib.h"
+#include"hashmap.h"
+#include"arraylib.h"
 
 unsigned int times33(char *key)
 {

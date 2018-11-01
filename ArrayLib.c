@@ -1,4 +1,4 @@
-﻿#include"ArrayLib.h"
+﻿#include"arraylib.h"
 #include<malloc.h>
 
 

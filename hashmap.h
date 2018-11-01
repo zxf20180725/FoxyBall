@@ -1,6 +1,6 @@
 ﻿#ifndef _FUNC_
 #define _FUNC_
-#include"ArrayLib.h"
+#include"arraylib.h"
 
 //kv结构
 typedef struct kv
