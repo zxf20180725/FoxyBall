@@ -1,4 +1,4 @@
-#include"ArrayLib.h"
+ï»¿#include"ArrayLib.h"
 #include<malloc.h>
 
 
@@ -7,7 +7,7 @@ Array *init_array(int n)
 	int i=0;
 	Array *arr=(Array*)malloc(sizeof(Array));
 	
-	//ÄÚ´æ·ÖÀàÊ§°Ü
+	//å†…å­˜åˆ†ç±»å¤±è´¥
 	if(arr==0)
 		return 0;
 

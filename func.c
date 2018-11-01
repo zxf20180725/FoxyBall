@@ -1,4 +1,4 @@
-#include<malloc.h>
+ï»¿#include<malloc.h>
 #include <string.h>
 #include"func.h"
 #include"ArrayLib.h"
@@ -48,11 +48,11 @@ int hash(char *k,int length)
 
 int add_data(Array *arr,char *k,char *v)
 {
-	//¼ÆËãindex
+	//è®¡ç®—index
 	int index=hash(k,arr->n);
-	//»ñÈ¡entry
+	//èŽ·å–entry
 	Entry* entry=(Entry*)arr->data[index];
-	//hash³åÍ»
+	//hashå†²çª
 	if(entry->k==0)
 	{
 		entry->k=k;
@@ -83,17 +83,17 @@ int add_data(Array *arr,char *k,char *v)
 char *get_data(Array *arr,char *k)
 {
 	int index=hash(k,arr->n);
-	//»ñÈ¡entry
+	//èŽ·å–entry
 	Entry *entry=(Entry*)arr->data[index];
-	//Ã»ÓÐ²éÑ¯µ½
+	//æ²¡æœ‰æŸ¥è¯¢åˆ°
 	if(entry->k==0)
 		return 0;
-	//Á´±í²éÑ¯
+	//é“¾è¡¨æŸ¥è¯¢
 	do
 	{
 		if(strcmp(k,entry->k)==0)
 			return entry->v;
 	}while(entry=entry->next);
-	//Ã»²éµ½
+	//æ²¡æŸ¥åˆ°
 	return 0;
 }

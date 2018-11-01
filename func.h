@@ -1,8 +1,8 @@
-#ifndef _FUNC_
+ï»¿#ifndef _FUNC_
 #define _FUNC_
 #include"ArrayLib.h"
 
-//kv½á¹¹
+//kvç»“æ„
 typedef struct kv
 {
 	struct kv *next;
@@ -10,25 +10,25 @@ typedef struct kv
     char *v;
 } Entry;
 
-//´´½¨hashtable
+//åˆ›å»ºhashtable
 Array *new_hash_table(int length);
 
-//³õÊ¼»¯Entry
+//åˆå§‹åŒ–Entry
 void init_entry(Entry *entry);
 
-//´´½¨Entry
+//åˆ›å»ºEntry
 Entry *new_entry();
 
-//hash¼ÆËãÏÂ±ê
+//hashè®¡ç®—ä¸‹æ ‡
 int hash(char *k,int length);
 
 //DJB Hash Function
 unsigned int times33(char *key);
 
-//Ïòhash±íÖĞÌí¼ÓÊı¾İ
+//å‘hashè¡¨ä¸­æ·»åŠ æ•°æ®
 int add_data(Array *arr,char *k,char *v);
 
-//¹âËÙ²éÕÒÊı¾İ
+//å…‰é€ŸæŸ¥æ‰¾æ•°æ®
 char *get_data(Array *arr,char *k);
 
 #endif
