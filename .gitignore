@@ -1,3 +1,7 @@
 !*.c
 !*.h
 !*.cpp
+*.tlog
+*.idb
+*.filters
+*.vcxproj
