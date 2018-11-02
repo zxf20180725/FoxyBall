@@ -28,13 +28,16 @@ int hash(char *k,int length);
 //DJB Hash Function
 unsigned int times33(char *key);
 
+//判断key是否存在(返回0不存在)
+Entry *exist_key(Array *arr, char *k);
+
 //向hash表中添加数据(返回1成功 0失败)
 int add_data(Array *arr,char *k,char *v);
 
 //删除key以及其数据(返回1成功 0失败)
 int del_key(Array *arr, char *k);
 
-//光速查找数据
+//光速查找数据(返回0失败)
 char *get_data(Array *arr,char *k);
 
 #endif

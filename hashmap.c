@@ -94,6 +94,18 @@ int hash(char *k, int length)
 	return ret;
 }
 
+Entry *exist_key(Array *arr, char *k)
+{
+	int index = hash(k, arr->n);
+	Entry *current = (Entry *)arr->data[index];
+	do
+	{
+		if (strcmp(current->k, k) == 0)
+			return current;
+	} while (current = current->next);
+	return 0;
+}
+
 int add_data(Array *arr, char *k, char *v)
 {
 	//计算index
@@ -128,20 +140,72 @@ int add_data(Array *arr, char *k, char *v)
 	}
 }
 
-char *get_data(Array *arr, char *k)
+int del_key(Array *arr, char *k)
 {
 	int index = hash(k, arr->n);
-	//获取entry
-	Entry *entry = (Entry*)arr->data[index];
-	//没有查询到
-	if (entry->k == 0)
-		return 0;
-	//链表查询
+	Entry *current = (Entry *)arr->data[index];
+	Entry *last = 0;
 	do
 	{
-		if (strcmp(k, entry->k) == 0)
-			return entry->v;
-	} while (entry = entry->next);
-	//没查到
+		if (strcmp(current->k, k) == 0)
+		{
+			//要删除的键是链表头
+			if (last == 0)
+			{
+				//有下一个元素
+				if (current->next)
+				{
+					Entry *next = current->next;
+					free(current->k);
+					free(current->v);
+					free(current);
+					current = next;
+					return 1;
+				}
+				//没下一个元素
+				else
+				{
+					free(current->k);
+					free(current->v);
+					current->k = 0;
+					current->v = 0;
+					return 1;
+				}
+			}
+			//删除的不是表头
+			else
+			{
+				//有下一个元素
+				if (current->next)
+				{
+					Entry *next = current->next;
+					free(current->k);
+					free(current->v);
+					free(current);
+					last->next = current->next;
+					return 1;
+				}
+				//没有下一个元素
+				else
+				{
+					free(current->k);
+					free(current->v);
+					free(current);
+					last->next = 0;
+					return 1;
+				}
+			}
+		}
+		last = current;
+	} while (current = current->next);
 	return 0;
+}
+
+char *get_data(Array *arr, char *k)
+{
+	Entry *entry = exist_key(arr, k);
+	//没有查询到
+	if (entry == 0)
+		return 0;
+	return entry->v;
 }

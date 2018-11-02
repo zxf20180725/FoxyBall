@@ -28,14 +28,14 @@ int main()
 
 	for (i = 0; i < len; i++)
 	{
-		//char *k = (char *)malloc(1024);
+		char *k = (char *)malloc(1024);
 		char *v = (char *)malloc(1024);
 
-		//sprintf(k,"key%d", i);
+		sprintf(k,"key%d", i);
 		sprintf(v,"值：%d", i);
-		add_data(hash_table, key[i], v);
+		add_data(hash_table, k, v);
 	}
-
+	del_key(hash_table, "key2");
 	//free_entry(hash_table->data[0]);
 
 	for (i = 0; i < hash_table->n; i++)
