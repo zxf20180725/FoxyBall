@@ -35,7 +35,7 @@ int main()
 		sprintf(v,"值：%d", i);
 		add_data(hash_table, k, v);
 	}
-	del_key(hash_table, "key2");
+	del_key(hash_table, "key10");
 	//free_entry(hash_table->data[0]);
 
 	for (i = 0; i < hash_table->n; i++)

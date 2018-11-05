@@ -159,7 +159,7 @@ int del_key(Array *arr, char *k)
 					free(current->k);
 					free(current->v);
 					free(current);
-					current = next;
+					arr->data[index] = next;
 					return 1;
 				}
 				//没下一个元素
@@ -179,10 +179,10 @@ int del_key(Array *arr, char *k)
 				if (current->next)
 				{
 					Entry *next = current->next;
+					last->next = current->next;
 					free(current->k);
 					free(current->v);
 					free(current);
-					last->next = current->next;
 					return 1;
 				}
 				//没有下一个元素
