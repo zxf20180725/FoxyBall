@@ -1,5 +1,5 @@
-﻿#ifndef _FUNC_
-#define _FUNC_
+﻿#ifndef _HASHMAP_H_
+#define _HASHMAP_H_
 #include"arraylib.h"
 
 //kv结构
@@ -25,7 +25,7 @@ Entry *new_entry();
 //hash计算下标
 int hash(char *k,int length);
 
-//DJB Hash Function
+//times33算法
 unsigned int times33(char *key);
 
 //判断key是否存在(返回0不存在)

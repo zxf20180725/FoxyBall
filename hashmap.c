@@ -2,6 +2,8 @@
 #include <string.h>
 #include"hashmap.h"
 #include"arraylib.h"
+#include"expire.h"
+#include"global.h"
 
 unsigned int times33(char *key)
 {
@@ -21,21 +23,6 @@ void init_entry(Entry *entry)
 
 void free_entry(Entry *entry)
 {
-	/*
-	if (entry == 0)
-	return;
-
-	free(entry->k);
-	free(entry->v);
-
-	entry->k = 0;
-	entry->v = 0;
-
-	free_entry(entry->next);
-
-	free(entry);
-
-	entry = 0;*/
 	Entry *p = entry->next, *q = 0;
 	//传入的是空指针
 	if (entry == 0)
@@ -134,7 +121,6 @@ int add_data(Array *arr, char *k, char *v)
 				entry->next = e_t;
 				return 1;
 			}
-
 			entry = entry->next;
 		}
 	}
@@ -156,6 +142,7 @@ int del_key(Array *arr, char *k)
 				if (current->next)
 				{
 					Entry *next = current->next;
+					del_key_before(current, expires_head->next);
 					free(current->k);
 					free(current->v);
 					free(current);
@@ -165,6 +152,7 @@ int del_key(Array *arr, char *k)
 				//没下一个元素
 				else
 				{
+					del_key_before(current, expires_head->next);
 					free(current->k);
 					free(current->v);
 					current->k = 0;
@@ -180,6 +168,7 @@ int del_key(Array *arr, char *k)
 				{
 					Entry *next = current->next;
 					last->next = current->next;
+					del_key_before(current, expires_head->next);
 					free(current->k);
 					free(current->v);
 					free(current);
@@ -188,6 +177,7 @@ int del_key(Array *arr, char *k)
 				//没有下一个元素
 				else
 				{
+					del_key_before(current, expires_head->next);
 					free(current->k);
 					free(current->v);
 					free(current);
@@ -204,8 +194,12 @@ int del_key(Array *arr, char *k)
 char *get_data(Array *arr, char *k)
 {
 	Entry *entry = exist_key(arr, k);
+	int signal;
 	//没有查询到
 	if (entry == 0)
+		return 0;
+	signal = expire_if_needed(entry, expires_head->next);
+	if (signal)
 		return 0;
 	return entry->v;
 }
