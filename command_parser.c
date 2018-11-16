@@ -1,42 +1,42 @@
-#include<string.h>
+ï»¿#include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
 #include"command_parser.h"
 #include"utils.h"
 
 char *help_text[22] = {
-	"ÃüÁî½âÎöÆ÷£¬FoxyBallËùÓĞÃüÁî£º",
+	"å‘½ä»¤è§£æå™¨ï¼ŒFoxyBallæ‰€æœ‰å‘½ä»¤ï¼š",
 	"",
-	"È¨ÏŞ£º",
-	"	µÇÂ¼£º              login <username> <password>",
+	"æƒé™ï¼š",
+	"	ç™»å½•ï¼š              login <username> <password>",
 	"",
-	"¶Ôkv²Ù×÷£º",
-	"	Ìí¼ÓÒ»¸ökey£º       set <key> <value>",
-	"	É¾³ıÒ»¸ökey£º       del <key>",
-	"	²éÑ¯keyµÄvalue£º    get <key>",
-	"	ÉèÖÃ¹ıÆÚÊ±¼ä£º      expire <key> <second>",
-	"	²é¿´Ê£ÓàÊ±¼ä£º      ttl <key>",
-	"	ÅĞ¶ÏkeyÊÇ·ñ´æÔÚ£º   exists <key>",
-	"	Çå¿ÕËùÓĞkey£º       flush",
+	"å¯¹kvæ“ä½œï¼š",
+	"	æ·»åŠ ä¸€ä¸ªkeyï¼š       set <key> <value>",
+	"	åˆ é™¤ä¸€ä¸ªkeyï¼š       del <key>",
+	"	æŸ¥è¯¢keyçš„valueï¼š    get <key>",
+	"	è®¾ç½®è¿‡æœŸæ—¶é—´ï¼š      expire <key> <second>",
+	"	æŸ¥çœ‹å‰©ä½™æ—¶é—´ï¼š      ttl <key>",
+	"	åˆ¤æ–­keyæ˜¯å¦å­˜åœ¨ï¼š   exists <key>",
+	"	æ¸…ç©ºæ‰€æœ‰keyï¼š       flush",
 	"",
-	"³Ö¾Ã»¯²Ù×÷£º",
-	"	±£´æÊı¾İ£º          save",
+	"æŒä¹…åŒ–æ“ä½œï¼š",
+	"	ä¿å­˜æ•°æ®ï¼š          save",
 	"",
-	"ÆäËû£º",
-	"	°ïÖú£º              help",
-	"	ÏÔÊ¾ËùÓĞkv£º        show",
-	"	ÇåÆÁ£º              cls",
-	"	°æ±¾ĞÅÏ¢£º          version"
+	"å…¶ä»–ï¼š",
+	"	å¸®åŠ©ï¼š              help",
+	"	æ˜¾ç¤ºæ‰€æœ‰kvï¼š        show",
+	"	æ¸…å±ï¼š              cls",
+	"	ç‰ˆæœ¬ä¿¡æ¯ï¼š          version"
 };
 
 void parse_cmd(char *cmd)
 {
-	char **sub_cmd = split(cmd, " ");		//ÇĞ¸îÃüÁî
-	int length = get_split_length(sub_cmd);	//ÃüÁî³¤¶È
+	char **sub_cmd = split(cmd, " ");		//åˆ‡å‰²å‘½ä»¤
+	int length = get_split_length(sub_cmd);	//å‘½ä»¤é•¿åº¦
 	if (length <= 0)
 		return;
 
-	//showÃüÁî
+	//showå‘½ä»¤
 	if (strcmp(sub_cmd[0], "show") == 0 && length == 1)
 	{
 		show_all();
@@ -44,7 +44,7 @@ void parse_cmd(char *cmd)
 		return;
 	}
 
-	//clsÃüÁî
+	//clså‘½ä»¤
 	if (strcmp(sub_cmd[0], "cls") == 0 && length == 1)
 	{
 		system("cls");
@@ -52,7 +52,7 @@ void parse_cmd(char *cmd)
 		return;
 	}
 
-	//helpÃüÁî
+	//helpå‘½ä»¤
 	if (strcmp(sub_cmd[0], "help") == 0 && length == 1)
 	{
 		for (int len = 0; len < 22; len++)
@@ -63,38 +63,38 @@ void parse_cmd(char *cmd)
 		return;
 	}
 
-	//versionÃüÁî
+	//versionå‘½ä»¤
 	if (strcmp(sub_cmd[0], "version") == 0 && length == 1)
 	{
-		printf("     FoxyBall£¨v%s£¬%s£©\n     ×÷Õß£º%s\n", VERSION, UPDATE_TIME, AUTHOR);
+		printf("     FoxyBallï¼ˆv%sï¼Œ%sï¼‰\n     ä½œè€…ï¼š%s\n", VERSION, UPDATE_TIME, AUTHOR);
 		free_split(sub_cmd);
 		return;
 	}
 
-	//setÃüÁî
+	//setå‘½ä»¤
 	if (strcmp(sub_cmd[0], "set")==0 && length == 3)
 	{
 		int ret=add_data(hash_table,sub_cmd[1],sub_cmd[2]);
 		free_split(sub_cmd);
 		if (ret)
-			printf("Ìí¼ÓÊı¾İ³É¹¦£¡\n");
+			printf("æ·»åŠ æ•°æ®æˆåŠŸï¼\n");
 		else
-			printf("Ìí¼ÓÊı¾İÊ§°Ü£¡Çë¼ì²ékeyÊÇ·ñÒÑ´æÔÚ£¡\n");
+			printf("æ·»åŠ æ•°æ®å¤±è´¥ï¼è¯·æ£€æŸ¥keyæ˜¯å¦å·²å­˜åœ¨ï¼\n");
 		return;
 	}
 
-	//delÃüÁî
+	//delå‘½ä»¤
 	if (strcmp(sub_cmd[0], "del") == 0 && length == 2)
 	{
 		int ret = del_key(hash_table, sub_cmd[1]);
 		if (ret)
-			printf("É¾³ı³É¹¦£¬key£º%s\n",sub_cmd[1]);
+			printf("åˆ é™¤æˆåŠŸï¼Œkeyï¼š%s\n",sub_cmd[1]);
 		else
-			printf("É¾³ıÊ§°Ü£¡Çë¼ì²ékeyÊÇ·ñ´æÔÚ£¡\n");
+			printf("åˆ é™¤å¤±è´¥ï¼è¯·æ£€æŸ¥keyæ˜¯å¦å­˜åœ¨ï¼\n");
 		free_split(sub_cmd);
 		return;
 	}
 
-	printf("ÃüÁî·Ç·¨£¡\n");
+	printf("å‘½ä»¤éæ³•ï¼\n");
 	return;
 }

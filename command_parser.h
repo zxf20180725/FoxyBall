@@ -1,35 +1,35 @@
-#ifndef  _COMMAND_PARSER_H_
+ï»¿#ifndef  _COMMAND_PARSER_H_
 #define _COMMAND_PARSER_H_
 #include"hashmap.h"
 #include"arraylib.h"
 #include"expire.h"
 #include"global.h"
 /*
-	ÃüÁî½âÎöÆ÷£¬FoxyBallËùÓĞÃüÁî£º
+	å‘½ä»¤è§£æå™¨ï¼ŒFoxyBallæ‰€æœ‰å‘½ä»¤ï¼š
 	
-	È¨ÏŞ£º
-		µÇÂ¼£º				login <username> <password>
+	æƒé™ï¼š
+		ç™»å½•ï¼š				login <username> <password>
 
-	¶Ôkv²Ù×÷£º
-		Ìí¼ÓÒ»¸ökey£º		set <key> <value>		
-		É¾³ıÒ»¸ökey£º		del <key>
-		²éÑ¯keyµÄvalue£º	get <key>
-		ÉèÖÃ¹ıÆÚÊ±¼ä£º		expire <key> <second>
-		²é¿´Ê£ÓàÊ±¼ä£º		ttl <key>
-		ÅĞ¶ÏkeyÊÇ·ñ´æÔÚ£º	exists <key>
-		Çå¿ÕËùÓĞkey£º		flush
+	å¯¹kvæ“ä½œï¼š
+		æ·»åŠ ä¸€ä¸ªkeyï¼š		set <key> <value>		
+		åˆ é™¤ä¸€ä¸ªkeyï¼š		del <key>
+		æŸ¥è¯¢keyçš„valueï¼š	get <key>
+		è®¾ç½®è¿‡æœŸæ—¶é—´ï¼š		expire <key> <second>
+		æŸ¥çœ‹å‰©ä½™æ—¶é—´ï¼š		ttl <key>
+		åˆ¤æ–­keyæ˜¯å¦å­˜åœ¨ï¼š	exists <key>
+		æ¸…ç©ºæ‰€æœ‰keyï¼š		flush
 
-	³Ö¾Ã»¯²Ù×÷£º
-		±£´æÊı¾İ£º			save
+	æŒä¹…åŒ–æ“ä½œï¼š
+		ä¿å­˜æ•°æ®ï¼š			save
 
-	ÆäËû£º
-		°ïÖú£º				help <cmd>
-		ÏÔÊ¾ËùÓĞkv£º		show
-		ÇåÆÁ£º				cls
+	å…¶ä»–ï¼š
+		å¸®åŠ©ï¼š				help <cmd>
+		æ˜¾ç¤ºæ‰€æœ‰kvï¼š		show
+		æ¸…å±ï¼š				cls
 */
 
 
-//½âÎöÃüÁî
+//è§£æå‘½ä»¤
 void parse_cmd(char *cmd);
 
 #endif

@@ -1,26 +1,26 @@
-#ifndef  _EXPIRE_H_
+ï»¿#ifndef  _EXPIRE_H_
 #define  _EXPIRE_H_
 #include"arraylib.h"
 #include"hashmap.h"
 
-//Ê¹ÓÃ¸Ã½á¹¹Ê±£¬ĞèÒªÍ·½áµã£¬Í·½áµã²»°üº¬Êı¾İ
+//ä½¿ç”¨è¯¥ç»“æ„æ—¶ï¼Œéœ€è¦å¤´ç»“ç‚¹ï¼Œå¤´ç»“ç‚¹ä¸åŒ…å«æ•°æ®
 typedef struct expires
 {
-	struct expires *next;	//ÏÂÒ»¸ö
-	struct expires *last;	//ÉÏÒ»¸ö
-	Entry *entry;			//ÓĞ¹ıÆÚÊ±¼äµÄkv
-	long expire;			//¹ıÆÚÊ±¼ä
+	struct expires *next;	//ä¸‹ä¸€ä¸ª
+	struct expires *last;	//ä¸Šä¸€ä¸ª
+	Entry *entry;			//æœ‰è¿‡æœŸæ—¶é—´çš„kv
+	long expire;			//è¿‡æœŸæ—¶é—´
 }Expires;
 
-//ÉèÖÃ¹ıÆÚÊ±¼ä
+//è®¾ç½®è¿‡æœŸæ—¶é—´
 int set_expire(Array *arr, Expires *expires_head, char *k, long time);
 
-//»ñÈ¡µ±Ç°Ê±¼ä´Á
+//è·å–å½“å‰æ—¶é—´æˆ³
 long get_timestamp();
 
-//É¾³ı¹ıÆÚ¼ü £¨¶èĞÔÉ¾³ı£©
+//åˆ é™¤è¿‡æœŸé”® ï¼ˆæƒ°æ€§åˆ é™¤ï¼‰
 int expire_if_needed(Entry *dest_entry, Expires *expires);
 
-//É¾³ı¼üÖ®Ç°ÇåÀíexpires±í
+//åˆ é™¤é”®ä¹‹å‰æ¸…ç†expiresè¡¨
 int del_key_before(Entry *dest_entry, Expires *expires);
 #endif

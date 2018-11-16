@@ -1,15 +1,15 @@
-#include <string.h>
+ï»¿#include <string.h>
 #include<malloc.h>
 #include"utils.h"
 
 char** split(char *str, char *delimiter) {
 
 	int len = strlen(str);
-	char *strCopy = (char*)malloc((len + 1) * sizeof(char)); //¶îÍâ·ÖÅä¶àÒ»¸ö×Ö·û¿Õ¼äÀ´´æ´¢'\0'
+	char *strCopy = (char*)malloc((len + 1) * sizeof(char)); //é¢å¤–åˆ†é…å¤šä¸€ä¸ªå­—ç¬¦ç©ºé—´æ¥å­˜å‚¨'\0'
 
-	strcpy(strCopy, str); //¸´ÖÆstr×Ö·û´®
+	strcpy(strCopy, str); //å¤åˆ¶strå­—ç¬¦ä¸²
 
-	//½«strCopyÖĞµÄÃ¿¸ö·Ö¸ô·û¸³ÖµÎª'\0'
+	//å°†strCopyä¸­çš„æ¯ä¸ªåˆ†éš”ç¬¦èµ‹å€¼ä¸º'\0'
 	for (int i = 0; strCopy[i] != '\0'; i++) {
 		for (int j = 0; delimiter[j] != '\0'; j++) {
 			if (strCopy[i] == delimiter[j]) {
@@ -19,10 +19,10 @@ char** split(char *str, char *delimiter) {
 		}
 	}
 
-	//Îª×Ö·û´®Êı×é·ÖÅä¿Õ¼ä,¶îÍâ·ÖÅä¶àÒ»¸ö×Ö·û´®Ö¸Õë²¢¸³ÖµÎªNULLÀ´×÷Îª×Ö·û´®½áÊø±êÖ¾
+	//ä¸ºå­—ç¬¦ä¸²æ•°ç»„åˆ†é…ç©ºé—´,é¢å¤–åˆ†é…å¤šä¸€ä¸ªå­—ç¬¦ä¸²æŒ‡é’ˆå¹¶èµ‹å€¼ä¸ºNULLæ¥ä½œä¸ºå­—ç¬¦ä¸²ç»“æŸæ ‡å¿—
 	char** res = (char**)malloc((len + 2) * sizeof(char*));
-	len++; //±éÀúµ½strCopy×îºóµÄ'\0'²Å½áÊø
-	int resI = 0; //Ã¿Ò»¸ö·Ö¸ô·ûºÍÔ­×Ö·û´®µÄ'\0'±êÖ¾ÒÀ´Î×÷ÎªÊı×éÖĞµÄ×Ö·û´®µÄ½áÊø±êÖ¾
+	len++; //éå†åˆ°strCopyæœ€åçš„'\0'æ‰ç»“æŸ
+	int resI = 0; //æ¯ä¸€ä¸ªåˆ†éš”ç¬¦å’ŒåŸå­—ç¬¦ä¸²çš„'\0'æ ‡å¿—ä¾æ¬¡ä½œä¸ºæ•°ç»„ä¸­çš„å­—ç¬¦ä¸²çš„ç»“æŸæ ‡å¿—
 
 	for (int i = 0; i < len; i++) {
 		res[resI++] = strCopy + i;
@@ -30,7 +30,7 @@ char** split(char *str, char *delimiter) {
 			i++;
 		}
 	}
-	res[resI] = 0; //×Ö·û´®Êı×éÖĞ½áÊø±êÖ¾
+	res[resI] = 0; //å­—ç¬¦ä¸²æ•°ç»„ä¸­ç»“æŸæ ‡å¿—
 
 	return res;
 }

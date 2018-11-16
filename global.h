@@ -1,15 +1,15 @@
-#ifndef _GLOBAL_H
+ï»¿#ifndef _GLOBAL_H
 #define _GLOBAL_H
 #include"arraylib.h"
 #include"expire.h"
 
 #define VERSION "0.0.1"
-#define UPDATE_TIME "2018Äê11ÔÂ16ÈÕ 16:13:39"
-#define AUTHOR "½Æ»«µÄÆ¤Çò"
+#define UPDATE_TIME "2018å¹´11æœˆ16æ—¥ 16:13:39"
+#define AUTHOR "ç‹¡çŒ¾çš„çš®çƒ"
 
-extern Array *hash_table;		//Êı¾İ¿âºËĞÄ½á¹¹
-extern Expires *expires_head;	//¹ıÆÚ±í
+extern Array *hash_table;		//æ•°æ®åº“æ ¸å¿ƒç»“æ„
+extern Expires *expires_head;	//è¿‡æœŸè¡¨
 
-//³õÊ¼»¯Êı¾İ¿â
+//åˆå§‹åŒ–æ•°æ®åº“
 int init_foxy_ball();
 #endif

@@ -1,4 +1,4 @@
-#include<time.h>
+ï»¿#include<time.h>
 #include<malloc.h>
 #include"hashmap.h"
 #include"expire.h"
@@ -15,7 +15,7 @@ long get_timestamp()
 int set_expire(Array *arr, Expires *expires_head, char *k, long time)
 {
 	Entry *dest_entry = exist_key(arr,k);
-	//key²»´æÔÚ
+	//keyä¸å­˜åœ¨
 	if (dest_entry == 0)
 		return 0;
 	while (1)
@@ -45,25 +45,25 @@ int expire_if_needed(Entry *dest_entry, Expires *expires)
 
 	do
 	{
-		//ÕÒµ½ÁËÐèÒªÉ¾³ýµÄentry
+		//æ‰¾åˆ°äº†éœ€è¦åˆ é™¤çš„entry
 		if (dest_entry == expires->entry)
 		{
-			//ÅÐ¶ÏÊÇ·ñ¹ýÆÚ
+			//åˆ¤æ–­æ˜¯å¦è¿‡æœŸ
 			if (expires->expire < get_timestamp())
 			{
-				//Ã»ÓÐÏÂÒ»¸ö½Úµã
+				//æ²¡æœ‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 				if (expires->next == 0)		
 				{
-					//ÔÚhash_tableÖÐÉ¾³ý
+					//åœ¨hash_tableä¸­åˆ é™¤
 					del_key(hash_table, dest_entry->k);
 					//expires->last->next = 0;
 					//free(expires);
 					return 1;
 				}
-				//ÓÐÏÂÒ»¸ö½Úµã
+				//æœ‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 				else
 				{
-					//ÔÚhash_tableÖÐÉ¾³ý
+					//åœ¨hash_tableä¸­åˆ é™¤
 					del_key(hash_table, dest_entry->k);
 					//expires->last->next = expires->next;
 					//free(expires);
@@ -82,17 +82,17 @@ int del_key_before(Entry *dest_entry, Expires *expires)
 
 	do
 	{
-		//ÕÒµ½ÁËÐèÒªÉ¾³ýµÄentry
+		//æ‰¾åˆ°äº†éœ€è¦åˆ é™¤çš„entry
 		if (dest_entry == expires->entry)
 		{
-			//É¾³ýµ±Ç°½Úµã
-			if (expires->next == 0)		//Ã»ÓÐÏÂÒ»¸ö½Úµã
+			//åˆ é™¤å½“å‰èŠ‚ç‚¹
+			if (expires->next == 0)		//æ²¡æœ‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 			{
 				expires->last->next = 0;
 				free(expires);
 				return 1;
 			}
-			//ÓÐÏÂÒ»¸ö½Úµã
+			//æœ‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 			else
 			{
 				expires->last->next = expires->next;
