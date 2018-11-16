@@ -9,6 +9,7 @@
 #include"expire.h"
 #include"global.h"
 #include"utils.h"
+#include"command_parser.h"
 
 int main()
 {
@@ -50,7 +51,7 @@ int main()
 	{
 		printf("FoxyBall>>>");
 		gets(cmd);
-		printf("success!\n", cmd);
+		parse_cmd(cmd);
 	}
 	free(cmd);
 	return 0;

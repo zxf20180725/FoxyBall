@@ -40,4 +40,6 @@ int del_key(Array *arr, char *k);
 //光速查找数据(返回0失败)
 char *get_data(Array *arr,char *k);
 
+//标准输出所有kv
+void show_all();
 #endif

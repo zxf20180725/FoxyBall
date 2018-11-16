@@ -44,7 +44,8 @@ int get_split_length(char** src)
 
 void free_split(char** src)
 {
-	for (int i = 0; src[i] != 0; i++)
-		free(src[i]);
+	//int length = get_split_length(src);
+	//for (int i = length - 1; i >= 0;i--)
+	//	free(src[i]);
 	free(src);
 }

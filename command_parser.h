@@ -24,9 +24,10 @@
 
 	其他：
 		帮助：				help <cmd>
+		显示所有kv			show
 */
 
-//解析命令（成功1 失败0）
-int parse_cmd(char *cmd);
+//解析命令
+void parse_cmd(char *cmd);
 
 #endif

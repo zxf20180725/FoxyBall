@@ -211,3 +211,19 @@ char *get_data(Array *arr, char *k)
 		return 0;
 	return entry->v;
 }
+
+void show_all()
+{
+	int i;
+	for (i = 0; i < hash_table->n; i++)
+	{
+		Entry *entry = (Entry*)hash_table->data[i];
+		if (entry->k != 0)
+		{
+			do
+			{
+				printf("index:%3d,value:%s,key:%s\n", i, entry->v, entry->k);
+			} while (entry = entry->next);
+		}
+	}
+}
