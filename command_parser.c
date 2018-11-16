@@ -1,5 +1,6 @@
 #include<string.h>
 #include<stdio.h>
+#include<stdlib.h>
 #include"command_parser.h"
 #include"utils.h"
 
@@ -14,6 +15,14 @@ void parse_cmd(char *cmd)
 	if (strcmp(sub_cmd[0], "show") == 0 && length == 1)
 	{
 		show_all();
+		free_split(sub_cmd);
+		return;
+	}
+
+	//clsÃüÁî
+	if (strcmp(sub_cmd[0], "cls") == 0 && length == 1)
+	{
+		system("cls");
 		free_split(sub_cmd);
 		return;
 	}

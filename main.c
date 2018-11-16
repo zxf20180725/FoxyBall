@@ -26,7 +26,6 @@ int main()
 		printf("FoxyBall>>>");
 		gets(cmd);
 		parse_cmd(cmd);
-		printf("\n");
 	}
 	free(cmd);
 	return 0;
