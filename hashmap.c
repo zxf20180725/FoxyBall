@@ -101,9 +101,9 @@ int add_data(Array *arr, char *k, char *v)
 	Entry* entry = (Entry*)arr->data[index];
 	//重新创建kv字符串，免得外部free了kv导致程序异常
 	int len_k = strlen(k);
-	char *c_k = (char*)malloc(len_k*sizeof(char));
+	char *c_k = (char*)malloc((len_k+1)*sizeof(char));	//+1是为了给一个结束位
 	int len_v = strlen(v);
-	char *c_v = (char*)malloc(len_v*sizeof(char));
+	char *c_v = (char*)malloc((len_v+1)*sizeof(char));
 	strcpy(c_k, k);
 	strcpy(c_v, v);
 
@@ -139,6 +139,8 @@ int del_key(Array *arr, char *k)
 	int index = hash(k, arr->n);
 	Entry *current = (Entry *)arr->data[index];
 	Entry *last = 0;
+	if (current->k == 0)
+		return 0;
 	do
 	{
 		if (strcmp(current->k, k) == 0)
