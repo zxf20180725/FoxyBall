@@ -24,9 +24,10 @@
 
 	其他：
 		帮助：				help <cmd>
-		显示所有kv			show
-		清屏				cls
+		显示所有kv：		show
+		清屏：				cls
 */
+
 
 //解析命令
 void parse_cmd(char *cmd);
