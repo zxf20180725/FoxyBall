@@ -95,6 +95,18 @@ void parse_cmd(char *cmd)
 		return;
 	}
 
+	//get命令
+	if (strcmp(sub_cmd[0], "get") == 0 && length == 2)
+	{
+		int ret = get_data(hash_table, sub_cmd[1]);
+		if (ret)
+			printf("key：%s\nvalue：%s\n", sub_cmd[1],ret);
+		else
+			printf("未找到！\n");
+		free_split(sub_cmd);
+		return;
+	}
+
 	printf("命令非法！\n");
 	return;
 }

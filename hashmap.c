@@ -85,6 +85,8 @@ Entry *exist_key(Array *arr, char *k)
 {
 	int index = hash(k, arr->n);
 	Entry *current = (Entry *)arr->data[index];
+	if (current->k == 0)
+		return 0;
 	do
 	{
 		if (strcmp(current->k, k) == 0)
