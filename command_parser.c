@@ -107,6 +107,19 @@ void parse_cmd(char *cmd)
 		return;
 	}
 
+	//expire命令
+	if (strcmp(sub_cmd[0], "expire") == 0 && length == 3)
+	{
+		long time = strtol(sub_cmd[2], 0, 0);
+		int ret = set_expire(hash_table, expires_head, sub_cmd[1], time);
+		if (ret)
+			printf("设置过期时间成功！\n");
+		else
+			printf("设置失败！请检查key是否存在！\n");
+		free_split(sub_cmd);
+		return;
+	}
+
 	printf("命令非法！\n");
 	return;
 }
