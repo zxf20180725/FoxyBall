@@ -8,7 +8,7 @@ Expires *expires_head = 0;
 int init_foxy_ball()
 {
 	//初始化数据库哈希表
-	hash_table = new_hash_table(3);
+	hash_table = new_hash_table(1024);
 	//初始化过期key表
 	expires_head = (Expires *)malloc(sizeof(Expires));
 	expires_head->entry = 0;

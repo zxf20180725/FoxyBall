@@ -99,24 +99,32 @@ int add_data(Array *arr, char *k, char *v)
 	int index = hash(k, arr->n);
 	//获取entry
 	Entry* entry = (Entry*)arr->data[index];
+	//重新创建kv字符串，免得外部free了kv导致程序异常
+	int len_k = strlen(k);
+	char *c_k = (char*)malloc(sizeof(char)); 
+	int len_v = strlen(v);
+	char *c_v = (char*)malloc(sizeof(char));
+	strcpy(c_k, k);
+	strcpy(c_v, v);
+
 	//hash冲突
 	if (entry->k == 0)
 	{
-		entry->k = k;
-		entry->v = v;
+		entry->k = c_k;
+		entry->v = c_v;
 	}
 	else
 	{
 		while (1)
 		{
-			if (strcmp(entry->k, k) == 0)
+			if (strcmp(entry->k, c_k) == 0)
 				return 0;
 
 			if (entry->next == 0)
 			{
 				Entry *e_t = new_entry();
-				e_t->k = k;
-				e_t->v = v;
+				e_t->k = c_k;
+				e_t->v = c_v;
 				e_t->next = 0;
 				entry->next = e_t;
 				return 1;

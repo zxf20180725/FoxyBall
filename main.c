@@ -2,73 +2,56 @@
 #include<stdio.h>
 #include<malloc.h>
 #include<stdlib.h>
-#include <time.h>
+#include<time.h>
+#include<string.h>
 #include"hashmap.h"
 #include"arraylib.h"
 #include"expire.h"
 #include"global.h"
+#include"utils.h"
 
 int main()
 {
-	char *key[] = {
-		"key1", "狡猾的皮球", "狡猾的球球",
-		"key4", "foxyball", "2018bf05a16eb3749b3e91397309035506e0f8ff",
-		"b765a065d8e64dec67daa4506a7bbd1a9d6401d2", "卧槽", "冲突测试",
-		"key1", "key1", "key1"
-	};
-	int len = sizeof(key) / sizeof(char*);
 	int i = 0;
+	char *cmd = (char *)malloc(1024);
 
-	char *ret = 0;
+	//char *cmd_text = "set abc 6666";
+	//char **ret = split(cmd_text, " ");
 
-	init_foxy_ball();
+	//printf("%d\n", get_split_length(ret));
+	//for (int j = 0; ret[j] != 0; j++) {
+	//	printf("%s\n", ret[j]);
+	//}
 
-	for (i = 0; i < len; i++)
+	if (!init_foxy_ball())
+		exit(0);
+
+	for (i = 0; i < 2048; i++)
 	{
 		char *k = (char *)malloc(1024);
 		char *v = (char *)malloc(1024);
-
 		sprintf(k, "key%d", i);
-		sprintf(v, "值：%d", i);
+		sprintf(v, "value%d", i);
 		add_data(hash_table, k, v);
 	}
 
-	set_expire(hash_table, expires_head, "key0", 5);
-	
-	//del_key(hash_table, "key0");
-
-	for (i = 0; i < hash_table->n; i++)
-	{
-		Entry *entry = (Entry*)hash_table->data[i];
-		if (entry->k != 0)
-		{
-			do
-			{
-				printf("index:%3d,value:%s,key:%s\n", i, entry->v, entry->k);
-			} while (entry = entry->next);
-		}
-	}
-
+	//for (i = 0; i < hash_table->n; i++)
+	//{
+	//	Entry *entry = (Entry*)hash_table->data[i];
+	//	if (entry->k != 0)
+	//	{
+	//		do
+	//		{
+	//			printf("index:%3d,value:%s,key:%s\n", i, entry->v, entry->k);
+	//		} while (entry = entry->next);
+	//	}
+	//}
 	while (1)
 	{
-		char key[100];
-		printf("---------------------------------\n");
-		printf("请输入要查询的key:");
-		gets(key);
-		printf("\n");
-		ret = get_data(hash_table, key);
-		if (ret == 0)
-			printf("没有查询到！\n");
-		else
-			printf("%s\n", ret);
+		printf("FoxyBall>>>");
+		gets(cmd);
+		printf("success!\n", cmd);
 	}
-
-	ret = get_data(hash_table, "key1");
-	if (ret == 0)
-		printf("没有查询到！\n");
-	else
-		printf("查询结果：%s\n", ret);
-
-	system("pause");
+	free(cmd);
 	return 0;
 }
