@@ -18,13 +18,15 @@ void parse_cmd(char *cmd)
 		return;
 	}
 
-
 	//set命令
 	if (strcmp(sub_cmd[0], "set")==0 && length == 3)
 	{
-		add_data(hash_table,sub_cmd[1],sub_cmd[2]);
+		int ret=add_data(hash_table,sub_cmd[1],sub_cmd[2]);
 		free_split(sub_cmd);
-		printf("添加数据成功！\n");
+		if (ret)
+			printf("添加数据成功！\n");
+		else
+			printf("添加数据失败！请检查key是否已存在！\n");
 		return;
 	}
 

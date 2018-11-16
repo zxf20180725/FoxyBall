@@ -15,43 +15,18 @@ int main()
 {
 	int i = 0;
 	char *cmd = (char *)malloc(1024);
-
-	//char *cmd_text = "set abc 6666";
-	//char **ret = split(cmd_text, " ");
-
-	//printf("%d\n", get_split_length(ret));
-	//for (int j = 0; ret[j] != 0; j++) {
-	//	printf("%s\n", ret[j]);
-	//}
+	char *test = "set aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 12313213213213213213213213213213213213213213212313213132132132";
+	char **ret=split(test, " ");
 
 	if (!init_foxy_ball())
 		exit(0);
 
-	for (i = 0; i < 2048; i++)
-	{
-		char *k = (char *)malloc(1024);
-		char *v = (char *)malloc(1024);
-		sprintf(k, "key%d", i);
-		sprintf(v, "value%d", i);
-		add_data(hash_table, k, v);
-	}
-
-	//for (i = 0; i < hash_table->n; i++)
-	//{
-	//	Entry *entry = (Entry*)hash_table->data[i];
-	//	if (entry->k != 0)
-	//	{
-	//		do
-	//		{
-	//			printf("index:%3d,value:%s,key:%s\n", i, entry->v, entry->k);
-	//		} while (entry = entry->next);
-	//	}
-	//}
 	while (1)
 	{
 		printf("FoxyBall>>>");
 		gets(cmd);
 		parse_cmd(cmd);
+		printf("\n");
 	}
 	free(cmd);
 	return 0;

@@ -101,9 +101,9 @@ int add_data(Array *arr, char *k, char *v)
 	Entry* entry = (Entry*)arr->data[index];
 	//重新创建kv字符串，免得外部free了kv导致程序异常
 	int len_k = strlen(k);
-	char *c_k = (char*)malloc(sizeof(char)); 
+	char *c_k = (char*)malloc(len_k*sizeof(char));
 	int len_v = strlen(v);
-	char *c_v = (char*)malloc(sizeof(char));
+	char *c_v = (char*)malloc(len_v*sizeof(char));
 	strcpy(c_k, k);
 	strcpy(c_v, v);
 
@@ -215,6 +215,7 @@ char *get_data(Array *arr, char *k)
 void show_all()
 {
 	int i;
+	printf("----------------------------------------------\n");
 	for (i = 0; i < hash_table->n; i++)
 	{
 		Entry *entry = (Entry*)hash_table->data[i];
@@ -226,4 +227,5 @@ void show_all()
 			} while (entry = entry->next);
 		}
 	}
+	printf("----------------------------------------------\n");
 }
