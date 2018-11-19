@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include"command_parser.h"
 #include"utils.h"
+#include"persistence.h"
 
 char *help_text[23] = {
 	"命令解析器，FoxyBall所有命令：",
@@ -132,6 +133,15 @@ void parse_cmd(char *cmd)
 		else
 			printf("设置失败！请检查key是否存在！\n");
 		free_split(sub_cmd);
+		return;
+	}
+
+	//save命令
+	if (strcmp(sub_cmd[0], "save") == 0 && length == 1)
+	{
+		save_hash_table();
+		free_split(sub_cmd);
+		printf("持久化数据成功！\n");
 		return;
 	}
 

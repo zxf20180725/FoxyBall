@@ -1,6 +1,5 @@
-﻿#ifndef _UTILS_H
-#define _UTILS_H
-
+﻿#ifndef _UTILS_H_
+#define _UTILS_H_
 
 /*
 用delimiter中的每一个分隔符分割str字符串,这并不会改变str中的字符,然后返回一个字符串数组.
