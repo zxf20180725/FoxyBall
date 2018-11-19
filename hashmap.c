@@ -108,6 +108,8 @@ int add_data(Array *arr, char *k, char *v)
 	char *c_v = (char*)malloc((len_v+1)*sizeof(char));
 	strcpy(c_k, k);
 	strcpy(c_v, v);
+	//计算内存使用量
+	memory_amount += ((len_k + 1)*sizeof(char)+(len_v + 1)*sizeof(char));
 
 	//hash冲突
 	if (entry->k == 0)
@@ -155,6 +157,8 @@ int del_key(Array *arr, char *k)
 				{
 					Entry *next = current->next;
 					del_key_before(current, expires_head->next);
+					//计算内存使用量
+					memory_amount -= ((strlen(current->k) + 1)*sizeof(char)+(strlen(current->v) + 1)*sizeof(char));
 					free(current->k);
 					free(current->v);
 					free(current);
@@ -165,6 +169,8 @@ int del_key(Array *arr, char *k)
 				else
 				{
 					del_key_before(current, expires_head->next);
+					//计算内存使用量
+					memory_amount -= ((strlen(current->k) + 1)*sizeof(char)+(strlen(current->v) + 1)*sizeof(char));
 					free(current->k);
 					free(current->v);
 					current->k = 0;
@@ -181,6 +187,8 @@ int del_key(Array *arr, char *k)
 					Entry *next = current->next;
 					last->next = current->next;
 					del_key_before(current, expires_head->next);
+					//计算内存使用量
+					memory_amount -= ((strlen(current->k) + 1)*sizeof(char)+(strlen(current->v) + 1)*sizeof(char));
 					free(current->k);
 					free(current->v);
 					free(current);
@@ -190,6 +198,8 @@ int del_key(Array *arr, char *k)
 				else
 				{
 					del_key_before(current, expires_head->next);
+					//计算内存使用量
+					memory_amount -= ((strlen(current->k) + 1)*sizeof(char)+(strlen(current->v) + 1)*sizeof(char));
 					free(current->k);
 					free(current->v);
 					free(current);

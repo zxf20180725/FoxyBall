@@ -4,7 +4,7 @@
 #include"command_parser.h"
 #include"utils.h"
 
-char *help_text[22] = {
+char *help_text[23] = {
 	"命令解析器，FoxyBall所有命令：",
 	"",
 	"权限：",
@@ -26,7 +26,8 @@ char *help_text[22] = {
 	"	帮助：              help",
 	"	显示所有kv：        show",
 	"	清屏：              cls",
-	"	版本信息：          version"
+	"	版本信息：          version",
+	"	内存使用量：        memory"
 };
 
 void parse_cmd(char *cmd)
@@ -60,7 +61,7 @@ void parse_cmd(char *cmd)
 	//help命令
 	if (strcmp(sub_cmd[0], "help") == 0 && length == 1)
 	{
-		for (int len = 0; len < 22; len++)
+		for (int len = 0; len < 23; len++)
 		{
 			printf("%s\n", help_text[len]);
 		}
@@ -76,10 +77,19 @@ void parse_cmd(char *cmd)
 		return;
 	}
 
-	//set命令
-	if (strcmp(sub_cmd[0], "set")==0 && length == 3)
+	//memory命令
+	if (strcmp(sub_cmd[0], "memory") == 0 && length == 1)
 	{
-		int ret=add_data(hash_table,sub_cmd[1],sub_cmd[2]);
+		//printf("FoxyBall内存使用量：%dB，%.2fKB，%.2fMB，%.2fGB\n", memory_amount, memory_amount / 1024.0, memory_amount / 1024.0 / 1024.0, memory_amount / 1024.0 / 1024.0 / 1024.0);
+		printf("FoxyBall内存使用量：\n\n\t%.4fMB\n\t%.4fKB\n\t%dB\n", memory_amount / 1024.0 / 1024.0, memory_amount / 1024.0, memory_amount);
+		free_split(sub_cmd);
+		return;
+	}
+
+	//set命令
+	if (strcmp(sub_cmd[0], "set") == 0 && length == 3)
+	{
+		int ret = add_data(hash_table, sub_cmd[1], sub_cmd[2]);
 		free_split(sub_cmd);
 		if (ret)
 			printf("添加数据成功！\n");
@@ -93,7 +103,7 @@ void parse_cmd(char *cmd)
 	{
 		int ret = del_key(hash_table, sub_cmd[1]);
 		if (ret)
-			printf("删除成功，key：%s\n",sub_cmd[1]);
+			printf("删除成功，key：%s\n", sub_cmd[1]);
 		else
 			printf("删除失败！请检查key是否存在！\n");
 		free_split(sub_cmd);
@@ -105,7 +115,7 @@ void parse_cmd(char *cmd)
 	{
 		int ret = get_data(hash_table, sub_cmd[1]);
 		if (ret)
-			printf("key：%s\nvalue：%s\n", sub_cmd[1],ret);
+			printf("key：%s\nvalue：%s\n", sub_cmd[1], ret);
 		else
 			printf("未找到！\n");
 		free_split(sub_cmd);

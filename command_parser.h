@@ -26,6 +26,7 @@
 		帮助：				help <cmd>
 		显示所有kv：		show
 		清屏：				cls
+		内存使用量：        memory
 */
 
 
