@@ -82,7 +82,7 @@ void parse_cmd(char *cmd)
 	if (strcmp(sub_cmd[0], "memory") == 0 && length == 1)
 	{
 		//printf("FoxyBall内存使用量：%dB，%.2fKB，%.2fMB，%.2fGB\n", memory_amount, memory_amount / 1024.0, memory_amount / 1024.0 / 1024.0, memory_amount / 1024.0 / 1024.0 / 1024.0);
-		printf("FoxyBall内存使用量：\n\n\t%.4fMB\n\t%.4fKB\n\t%dB\n", memory_amount / 1024.0 / 1024.0, memory_amount / 1024.0, memory_amount);
+		printf("FoxyBall内存使用量：\n\n\t%.4f MB\n\t%.4f KB\n\t%d B\n", memory_amount / 1024.0 / 1024.0, memory_amount / 1024.0, memory_amount);
 		free_split(sub_cmd);
 		return;
 	}

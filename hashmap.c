@@ -108,19 +108,21 @@ int add_data(Array *arr, char *k, char *v)
 	char *c_v = (char*)malloc((len_v+1)*sizeof(char));
 	strcpy(c_k, k);
 	strcpy(c_v, v);
-	//计算内存使用量
-	memory_amount += ((len_k + 1)*sizeof(char)+(len_v + 1)*sizeof(char));
 
 	//hash冲突
 	if (entry->k == 0)
 	{
 		entry->k = c_k;
 		entry->v = c_v;
+		//计算内存使用量
+		memory_amount += ((len_k + 1)*sizeof(char)+(len_v + 1)*sizeof(char));
+		return 1;
 	}
 	else
 	{
 		while (1)
 		{
+			//已存在该key
 			if (strcmp(entry->k, c_k) == 0)
 				return 0;
 
@@ -131,6 +133,8 @@ int add_data(Array *arr, char *k, char *v)
 				e_t->v = c_v;
 				e_t->next = 0;
 				entry->next = e_t;
+				//计算内存使用量
+				memory_amount += ((len_k + 1)*sizeof(char)+(len_v + 1)*sizeof(char));
 				return 1;
 			}
 			entry = entry->next;
