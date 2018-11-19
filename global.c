@@ -4,6 +4,7 @@
 
 Array *hash_table = 0;
 Expires *expires_head = 0;
+unsigned long memory_amount = 0;
 
 int init_foxy_ball()
 {

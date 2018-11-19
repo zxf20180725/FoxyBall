@@ -47,7 +47,12 @@ void parse_cmd(char *cmd)
 	//cls命令
 	if (strcmp(sub_cmd[0], "cls") == 0 && length == 1)
 	{
+#if ((defined _WIN32) || (defined _WIN64))
 		system("cls");
+#else
+		system("clear");
+#endif
+
 		free_split(sub_cmd);
 		return;
 	}

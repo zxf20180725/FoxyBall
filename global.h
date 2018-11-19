@@ -9,6 +9,8 @@
 
 extern Array *hash_table;		//数据库核心结构
 extern Expires *expires_head;	//过期表
+extern unsigned long memory_amount;		//内存使用量(单位字节)
+
 
 //初始化数据库
 int init_foxy_ball();

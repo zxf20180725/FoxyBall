@@ -1,22 +1,14 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<malloc.h>
-#include<stdlib.h>
-#include<time.h>
 #include<string.h>
-#include"hashmap.h"
-#include"arraylib.h"
-#include"expire.h"
 #include"global.h"
-#include"utils.h"
 #include"command_parser.h"
 
 int main()
 {
 	int i = 0;
-	char *cmd = (char *)malloc(1024);
-	char *test = "set aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 12313213213213213213213213213213213213213213212313213132132132";
-	char **ret=split(test, " ");
+	char *cmd = (char *)malloc(4096);
 
 	if (!init_foxy_ball())
 		exit(0);
@@ -28,5 +20,20 @@ int main()
 		parse_cmd(cmd);
 	}
 	free(cmd);
+
+	//char *cmd = (char *)malloc(4096);
+
+	//gets(cmd);
+
+	//FILE *fp = 0;
+
+	//fp = fopen("./test.dat", "wb");
+
+	//fwrite(cmd, (strlen(cmd)+1)*sizeof(char), 1, fp);
+
+	//printf("%d\n", strlen(cmd));
+
+	//fclose(fp);
+
 	return 0;
 }
