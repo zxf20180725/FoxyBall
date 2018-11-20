@@ -19,8 +19,17 @@ int set_expire(Array *arr, Expires *expires_head, char *k, long time)
 	//key不存在
 	if (dest_entry == 0)
 		return 0;
+	if (time < 0)
+		time = 0;
 	while (1)
 	{
+		//如果已存在这个过期键，直接更新过期时间
+		if (expires_head->entry == dest_entry)
+		{
+			expires_head->expire = get_timestamp() + time;
+			return 1;
+		}
+
 		if (expires_head->next == 0)
 		{
 			Expires *expire = (Expires *)malloc(sizeof(Expires));
