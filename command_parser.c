@@ -136,6 +136,19 @@ void parse_cmd(char *cmd)
 		return;
 	}
 
+	//ttl命令
+	if (strcmp(sub_cmd[0], "ttl") == 0 && length == 2)
+	{
+		long ret = get_expire(hash_table, expires_head, sub_cmd[1]);
+		if (ret == 0)
+			printf("该key没有过期时间！\n");
+		else
+			printf("%ld秒\n", ret);
+		free_split(sub_cmd);
+		return;
+	}
+
+
 	//save命令
 	if (strcmp(sub_cmd[0], "save") == 0 && length == 1)
 	{

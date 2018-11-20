@@ -1,5 +1,6 @@
 ﻿#include<time.h>
 #include<malloc.h>
+#include<string.h>
 #include"hashmap.h"
 #include"expire.h"
 #include"global.h"
@@ -14,7 +15,7 @@ long get_timestamp()
 
 int set_expire(Array *arr, Expires *expires_head, char *k, long time)
 {
-	Entry *dest_entry = exist_key(arr,k);
+	Entry *dest_entry = exist_key(arr, k);
 	//key不存在
 	if (dest_entry == 0)
 		return 0;
@@ -38,6 +39,28 @@ int set_expire(Array *arr, Expires *expires_head, char *k, long time)
 	return 0;
 }
 
+long get_expire(Array *arr, Expires *expires_head, char *k)
+{
+	if (expires_head->next == 0)
+		return 0;
+
+	expires_head = expires_head->next;
+
+	do
+	{
+		if (strcmp(expires_head->entry->k, k) == 0)
+		{
+			long ret = expires_head->expire - get_timestamp();
+			if (ret < 0)
+				return 0;
+			else
+				return ret;
+		}
+	} while (expires_head = expires_head->next);
+
+	return 0;
+}
+
 int expire_if_needed(Entry *dest_entry, Expires *expires)
 {
 	if (expires == 0)
@@ -52,7 +75,7 @@ int expire_if_needed(Entry *dest_entry, Expires *expires)
 			if (expires->expire < get_timestamp())
 			{
 				//没有下一个节点
-				if (expires->next == 0)		
+				if (expires->next == 0)
 				{
 					//在hash_table中删除
 					del_key(hash_table, dest_entry->k);
