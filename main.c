@@ -1,74 +1,42 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<malloc.h>
-#include<stdlib.h>
-#include <time.h>
-#include"hashmap.h"
-#include"arraylib.h"
-#include"expire.h"
+#include<string.h>
 #include"global.h"
-
+#include"command_parser.h"
+#include"protocol.h"
+/*
 int main()
 {
-	char *key[] = {
-		"key1", "狡猾的皮球", "狡猾的球球",
-		"key4", "foxyball", "2018bf05a16eb3749b3e91397309035506e0f8ff",
-		"b765a065d8e64dec67daa4506a7bbd1a9d6401d2", "卧槽", "冲突测试",
-		"key1", "key1", "key1"
-	};
-	int len = sizeof(key) / sizeof(char*);
 	int i = 0;
+	char *cmd = (char *)malloc(4096);
 
-	char *ret = 0;
-
-	init_foxy_ball();
-
-	for (i = 0; i < len; i++)
-	{
-		char *k = (char *)malloc(1024);
-		char *v = (char *)malloc(1024);
-
-		sprintf(k, "key%d", i);
-		sprintf(v, "值：%d", i);
-		add_data(hash_table, k, v);
-	}
-
-	set_expire(hash_table, expires_head, "key0", 5);
-	
-	//del_key(hash_table, "key0");
-
-	for (i = 0; i < hash_table->n; i++)
-	{
-		Entry *entry = (Entry*)hash_table->data[i];
-		if (entry->k != 0)
-		{
-			do
-			{
-				printf("index:%3d,value:%s,key:%s\n", i, entry->v, entry->k);
-			} while (entry = entry->next);
-		}
-	}
+	if (!init_foxy_ball())
+		exit(0);
 
 	while (1)
 	{
-		char key[100];
-		printf("---------------------------------\n");
-		printf("请输入要查询的key:");
-		gets(key);
-		printf("\n");
-		ret = get_data(hash_table, key);
-		if (ret == 0)
-			printf("没有查询到！\n");
-		else
-			printf("%s\n", ret);
+		printf("FoxyBall>>>");
+		gets(cmd);
+		parse_cmd(cmd);
 	}
+	free(cmd);
 
-	ret = get_data(hash_table, "key1");
-	if (ret == 0)
-		printf("没有查询到！\n");
-	else
-		printf("查询结果：%s\n", ret);
+	//char *cmd = (char *)malloc(4096);
 
-	system("pause");
+	//gets(cmd);
+
+	//FILE *fp = 0;
+
+	//fp = fopen("./test.dat", "wb");
+
+	//fwrite(cmd, (strlen(cmd)+1)*sizeof(char), 1, fp);
+
+	//printf("%d\n", strlen(cmd));
+
+	//fclose(fp);
+
 	return 0;
 }
+*/
+

@@ -5,3 +5,5 @@
 *.idb
 *.filters
 *.vcxproj
+*.dat
+db

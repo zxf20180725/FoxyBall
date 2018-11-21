@@ -85,6 +85,8 @@ Entry *exist_key(Array *arr, char *k)
 {
 	int index = hash(k, arr->n);
 	Entry *current = (Entry *)arr->data[index];
+	if (current->k == 0)
+		return 0;
 	do
 	{
 		if (strcmp(current->k, k) == 0)
@@ -99,26 +101,40 @@ int add_data(Array *arr, char *k, char *v)
 	int index = hash(k, arr->n);
 	//获取entry
 	Entry* entry = (Entry*)arr->data[index];
+	//重新创建kv字符串，免得外部free了kv导致程序异常
+	int len_k = strlen(k);
+	char *c_k = (char*)malloc((len_k+1)*sizeof(char));	//+1是为了给一个结束位
+	int len_v = strlen(v);
+	char *c_v = (char*)malloc((len_v+1)*sizeof(char));
+	strcpy(c_k, k);
+	strcpy(c_v, v);
+
 	//hash冲突
 	if (entry->k == 0)
 	{
-		entry->k = k;
-		entry->v = v;
+		entry->k = c_k;
+		entry->v = c_v;
+		//计算内存使用量
+		memory_amount += ((len_k + 1)*sizeof(char)+(len_v + 1)*sizeof(char));
+		return 1;
 	}
 	else
 	{
 		while (1)
 		{
-			if (strcmp(entry->k, k) == 0)
+			//已存在该key
+			if (strcmp(entry->k, c_k) == 0)
 				return 0;
 
 			if (entry->next == 0)
 			{
 				Entry *e_t = new_entry();
-				e_t->k = k;
-				e_t->v = v;
+				e_t->k = c_k;
+				e_t->v = c_v;
 				e_t->next = 0;
 				entry->next = e_t;
+				//计算内存使用量
+				memory_amount += ((len_k + 1)*sizeof(char)+(len_v + 1)*sizeof(char));
 				return 1;
 			}
 			entry = entry->next;
@@ -131,6 +147,8 @@ int del_key(Array *arr, char *k)
 	int index = hash(k, arr->n);
 	Entry *current = (Entry *)arr->data[index];
 	Entry *last = 0;
+	if (current->k == 0)
+		return 0;
 	do
 	{
 		if (strcmp(current->k, k) == 0)
@@ -143,6 +161,8 @@ int del_key(Array *arr, char *k)
 				{
 					Entry *next = current->next;
 					del_key_before(current, expires_head->next);
+					//计算内存使用量
+					memory_amount -= ((strlen(current->k) + 1)*sizeof(char)+(strlen(current->v) + 1)*sizeof(char));
 					free(current->k);
 					free(current->v);
 					free(current);
@@ -153,6 +173,8 @@ int del_key(Array *arr, char *k)
 				else
 				{
 					del_key_before(current, expires_head->next);
+					//计算内存使用量
+					memory_amount -= ((strlen(current->k) + 1)*sizeof(char)+(strlen(current->v) + 1)*sizeof(char));
 					free(current->k);
 					free(current->v);
 					current->k = 0;
@@ -169,6 +191,8 @@ int del_key(Array *arr, char *k)
 					Entry *next = current->next;
 					last->next = current->next;
 					del_key_before(current, expires_head->next);
+					//计算内存使用量
+					memory_amount -= ((strlen(current->k) + 1)*sizeof(char)+(strlen(current->v) + 1)*sizeof(char));
 					free(current->k);
 					free(current->v);
 					free(current);
@@ -178,6 +202,8 @@ int del_key(Array *arr, char *k)
 				else
 				{
 					del_key_before(current, expires_head->next);
+					//计算内存使用量
+					memory_amount -= ((strlen(current->k) + 1)*sizeof(char)+(strlen(current->v) + 1)*sizeof(char));
 					free(current->k);
 					free(current->v);
 					free(current);
@@ -202,4 +228,22 @@ char *get_data(Array *arr, char *k)
 	if (signal)
 		return 0;
 	return entry->v;
+}
+
+void show_all()
+{
+	int i;
+	printf("----------------------------------------------\n");
+	for (i = 0; i < hash_table->n; i++)
+	{
+		Entry *entry = (Entry*)hash_table->data[i];
+		if (entry->k != 0)
+		{
+			do
+			{
+				printf("index:%3d,value:%s,key:%s\n", i, entry->v, entry->k);
+			} while (entry = entry->next);
+		}
+	}
+	printf("----------------------------------------------\n");
 }

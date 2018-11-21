@@ -1,5 +1,6 @@
-#include<time.h>
+ï»¿#include<time.h>
 #include<malloc.h>
+#include<string.h>
 #include"hashmap.h"
 #include"expire.h"
 #include"global.h"
@@ -14,12 +15,21 @@ long get_timestamp()
 
 int set_expire(Array *arr, Expires *expires_head, char *k, long time)
 {
-	Entry *dest_entry = exist_key(arr,k);
-	//key²»´æÔÚ
+	Entry *dest_entry = exist_key(arr, k);
+	//keyä¸å­˜åœ¨
 	if (dest_entry == 0)
 		return 0;
+	if (time < 0)
+		time = 0;
 	while (1)
 	{
+		//å¦‚æœå·²å­˜åœ¨è¿™ä¸ªè¿‡æœŸé”®ï¼Œç›´æ¥æ›´æ–°è¿‡æœŸæ—¶é—´
+		if (expires_head->entry == dest_entry)
+		{
+			expires_head->expire = get_timestamp() + time;
+			return 1;
+		}
+
 		if (expires_head->next == 0)
 		{
 			Expires *expire = (Expires *)malloc(sizeof(Expires));
@@ -38,6 +48,28 @@ int set_expire(Array *arr, Expires *expires_head, char *k, long time)
 	return 0;
 }
 
+long get_expire(Array *arr, Expires *expires_head, char *k)
+{
+	if (expires_head->next == 0)
+		return 0;
+
+	expires_head = expires_head->next;
+
+	do
+	{
+		if (strcmp(expires_head->entry->k, k) == 0)
+		{
+			long ret = expires_head->expire - get_timestamp();
+			if (ret < 0)
+				return 0;
+			else
+				return ret;
+		}
+	} while (expires_head = expires_head->next);
+
+	return 0;
+}
+
 int expire_if_needed(Entry *dest_entry, Expires *expires)
 {
 	if (expires == 0)
@@ -45,25 +77,25 @@ int expire_if_needed(Entry *dest_entry, Expires *expires)
 
 	do
 	{
-		//ÕÒµ½ÁËĞèÒªÉ¾³ıµÄentry
+		//æ‰¾åˆ°äº†éœ€è¦åˆ é™¤çš„entry
 		if (dest_entry == expires->entry)
 		{
-			//ÅĞ¶ÏÊÇ·ñ¹ıÆÚ
+			//åˆ¤æ–­æ˜¯å¦è¿‡æœŸ
 			if (expires->expire < get_timestamp())
 			{
-				//Ã»ÓĞÏÂÒ»¸ö½Úµã
-				if (expires->next == 0)		
+				//æ²¡æœ‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
+				if (expires->next == 0)
 				{
-					//ÔÚhash_tableÖĞÉ¾³ı
+					//åœ¨hash_tableä¸­åˆ é™¤
 					del_key(hash_table, dest_entry->k);
 					//expires->last->next = 0;
 					//free(expires);
 					return 1;
 				}
-				//ÓĞÏÂÒ»¸ö½Úµã
+				//æœ‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 				else
 				{
-					//ÔÚhash_tableÖĞÉ¾³ı
+					//åœ¨hash_tableä¸­åˆ é™¤
 					del_key(hash_table, dest_entry->k);
 					//expires->last->next = expires->next;
 					//free(expires);
@@ -82,17 +114,17 @@ int del_key_before(Entry *dest_entry, Expires *expires)
 
 	do
 	{
-		//ÕÒµ½ÁËĞèÒªÉ¾³ıµÄentry
+		//æ‰¾åˆ°äº†éœ€è¦åˆ é™¤çš„entry
 		if (dest_entry == expires->entry)
 		{
-			//É¾³ıµ±Ç°½Úµã
-			if (expires->next == 0)		//Ã»ÓĞÏÂÒ»¸ö½Úµã
+			//åˆ é™¤å½“å‰èŠ‚ç‚¹
+			if (expires->next == 0)		//æ²¡æœ‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 			{
 				expires->last->next = 0;
 				free(expires);
 				return 1;
 			}
-			//ÓĞÏÂÒ»¸ö½Úµã
+			//æœ‰ä¸‹ä¸€ä¸ªèŠ‚ç‚¹
 			else
 			{
 				expires->last->next = expires->next;
