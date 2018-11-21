@@ -147,9 +147,11 @@ static void analysis(unsigned char *data, int length, Client *client)
 			else//否则 就是单个数据包大于缓冲区的情况
 			{
 				unsigned char *pck_bytes = split_bytes(data, 8, length - 8);
-				length = 0;
+
 				//把一个不完整的数据包给client
 				set_client_lack_pck(client, pck_bytes, pck_len, length - 8);
+
+				length = 0;
 			}
 		}
 		else if (client->remain_bytes >0)//接收剩余数据
@@ -180,7 +182,7 @@ static void analysis(unsigned char *data, int length, Client *client)
 		if (client->remain_bytes == 0)
 		{
 			printf("开头：%x\n", client->data[0]);
-			printf("结尾：%x\n", client->data[client->data_length]);
+			printf("结尾：%x\n", client->data[client->data_length-1]);
 			printf("长度：%d\n", client->data_length);
 			free(client->data);
 			client->data = 0;
@@ -255,16 +257,18 @@ void set_client_pck(Client *client, unsigned char *pck, int len)
 void set_client_lack_pck(Client *client, unsigned char *pck, int size, int len)
 {
 	client->data = pck;
-	client->data_length = len;
-	client->remain_bytes = len-size;
+	client->data_length = size;
+	client->remain_bytes = size-len;
 }
+
 
 void append_client_lack_pck(Client *client, unsigned char *pck, int len)
 {
 	int data_length = client->data_length;
 	int remain_length = client->remain_bytes;
 	//分配空间为之前的长度+本次补丁的长度
-	unsigned char *patch_pck = (char *)malloc(sizeof(char)*((data_length-remain_length)+(len)));
+	int pck_size = sizeof(char)*(data_length - remain_length + len);
+	unsigned char *patch_pck = (char *)malloc(pck_size);
 	//复制之前的数据进来
 	memcpy(patch_pck,client->data,data_length-remain_length);
 	//合并本次数据
@@ -275,8 +279,28 @@ void append_client_lack_pck(Client *client, unsigned char *pck, int len)
 	client->data = patch_pck;
 	client->remain_bytes -= len;
 }
-
-
+/*
+void append_client_lack_pck(Client *client, unsigned char *pck, int len)
+{
+	int data_length = client->data_length;
+	int remain_length = client->remain_bytes;
+	//分配空间为之前的长度+本次补丁的长度
+	int pck_size = sizeof(char)*(data_length - remain_length + len);
+	unsigned char *patch_pck = (char *)malloc(pck_size);
+	for (int i = 0; i < pck_size; i++)
+	{
+		if (i < data_length - remain_length)
+			patch_pck[i] = client->data[i];
+		else
+			patch_pck[i] = pck[i - data_length + remain_length];
+	}
+	//释放之前数据
+	free(client->data);
+	free(pck);
+	client->data = patch_pck;
+	client->remain_bytes -= len;
+}
+*/
 #else
 
 
@@ -285,14 +309,7 @@ void append_client_lack_pck(Client *client, unsigned char *pck, int len)
 
 int main(int argc, char* argv[])
 {
-	//if (run_server() == 0)
-	//	return 0;
-
-	unsigned char data[] = { 0xAB, 0xCD, 0xEF, 0xAB, 0x00, 0x04, 0x00, 0x00 };
-
-
-	printf("%d\n", get_pck_len(data));
-
-
+	if (run_server() == 0)
+		return 0;
 	return 0;
 }
