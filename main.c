@@ -4,7 +4,8 @@
 #include<string.h>
 #include"global.h"
 #include"command_parser.h"
-
+#include"protocol.h"
+/*
 int main()
 {
 	int i = 0;
@@ -37,3 +38,5 @@ int main()
 
 	return 0;
 }
+*/
+

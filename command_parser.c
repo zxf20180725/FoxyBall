@@ -54,7 +54,6 @@ void parse_cmd(char *cmd)
 #else
 		system("clear");
 #endif
-
 		free_split(sub_cmd);
 		return;
 	}
