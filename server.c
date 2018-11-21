@@ -16,7 +16,7 @@ typedef struct client
 	int is_run;							//该client是否正在被使用
 	HANDLE  h;							//为这个client服务的线程句柄
 
-	int remain_bytes;					//需要继续在缓冲区取多少字节的数据
+	int remain_bytes;					//需要继续在缓冲区取多少字节的数据(0代表当前有一个完整的data，并且还没处理；-1代表当前数据包为空；)
 	unsigned char *data;				//单次封包数据
 	int data_length;					//data的字节数
 }Client;
@@ -25,10 +25,12 @@ static Client client_list[MAX_CLIENT_NUMS] = { 0 };		//客户端列表
 static SOCKET server_socket;							//用于接收新client的socket
 static struct sockaddr_in server_info;					//用于存储本地创建socket的基本信息
 
-static void analysis(char* data, int datal, Client *client);		//解析数据
-DWORD WINAPI client_handler(LPVOID lpParameter);					//处理client
-void clear_client(Client *client);									//清理client
-
+static void analysis(char* data, int datal, Client *client);							//解析数据
+DWORD WINAPI client_handler(LPVOID lpParameter);										//处理client
+void clear_client(Client *client);														//清理client
+void set_client_pck(Client *client, unsigned char *pck, int len);						//给client设置完整数据包
+void set_client_lack_pck(Client *client, unsigned char *pck, int size, int len);		//设置不完整的数据包
+void append_client_lack_pck(Client *client, unsigned char *pck, int len);				//给数据包追加数据
 //启动server
 int run_server()
 {
@@ -114,24 +116,77 @@ int run_server()
 	}
 }
 
-static void analysis(unsigned char* data, int length, Client *client)
+static void analysis(unsigned char *data, int length, Client *client)
 {
-	printf("客户端（%s:%d）发来数据:%s  数据长度:%d\n", inet_ntoa(client->socket_info.sin_addr), client->socket_info.sin_port, data, length);
+	//printf("客户端（%s:%d）发来数据:%s  数据长度:%d\n", inet_ntoa(client->socket_info.sin_addr), client->socket_info.sin_port, data, length);
 
+	while (length != 0)
+	{
+		//根据client的数据来判断这次是从头拆包还是接收剩余数据
+		if (client->remain_bytes == -1)	//从头拆包
+		{
+			//校验(校验标识符4字节，包长度4字节)
+			if (!validate_pck(data, length))
+				return;
 
-	//根据client的数据来判断这次是从头拆包还是接收剩余数据
-	if (client->remain_bytes==-1)	//从头拆包
-	{
-		//校验(校验标识符4字节，包长度4字节)
-		if (length < 8)
-			return;
-		//获取数据包长度
-		//判断 （8+数据包长度）<= length 就是单个数据包小于等于缓冲区的情况
-		//否则 就是单个数据包大于缓冲区的情况
-	}
-	else//接收剩余数据
-	{
-			
+			//获取数据包长度
+			int pck_len = get_pck_len(data);
+
+			//判断 （8+数据包长度）<= length 就是单个数据包小于等于缓冲区的情况
+			if ((8 + pck_len) <= length)
+			{
+				//取数据包数据，把data中剩余数据前移
+				unsigned char *pck_bytes = split_bytes(data, 8, pck_len);
+				int remain_len = length - 8 - pck_len;		//数据包剩余长度
+				if (remain_len > 0)
+					memcpy(data, &data[8 + pck_len], remain_len);
+				length = remain_len;
+				//把一个完整的数据包给client
+				set_client_pck(client, pck_bytes, pck_len);
+			}
+			else//否则 就是单个数据包大于缓冲区的情况
+			{
+				unsigned char *pck_bytes = split_bytes(data, 8, length - 8);
+				length = 0;
+				//把一个不完整的数据包给client
+				set_client_lack_pck(client, pck_bytes, pck_len, length - 8);
+			}
+		}
+		else if (client->remain_bytes >0)//接收剩余数据
+		{
+			//剩余数据在缓冲区范围内
+			if (client->remain_bytes <= length)
+			{
+				//取剩余的数据
+				unsigned char *remain_bytes = split_bytes(data, 0, client->remain_bytes);
+				//合并到client中去
+				append_client_lack_pck(client, remain_bytes, client->remain_bytes);
+				//数据前移
+				int remain_len = length - (client->remain_bytes);
+				if (remain_len>0)
+					memcpy(data, &data[client->remain_bytes], remain_len);
+				length = remain_len;
+			}
+			else//剩余数据大于缓冲区范围
+			{
+				//取整个缓冲区的数据合并到client中
+				unsigned char *remain_bytes = split_bytes(data, 0, length);
+				append_client_lack_pck(client, remain_bytes, length);
+				length = 0;
+			}
+		}
+
+		//解析client中的数据包
+		if (client->remain_bytes == 0)
+		{
+			printf("开头：%x\n", client->data[0]);
+			printf("结尾：%x\n", client->data[client->data_length]);
+			printf("长度：%d\n", client->data_length);
+			free(client->data);
+			client->data = 0;
+			client->data_length = -1;
+			client->remain_bytes = -1;
+		}
 	}
 
 }
@@ -190,6 +245,38 @@ void clear_client(Client *client)
 	client->is_run = 0;
 }
 
+void set_client_pck(Client *client, unsigned char *pck, int len)
+{
+	client->data = pck;
+	client->data_length = len;
+	client->remain_bytes = 0;
+}
+
+void set_client_lack_pck(Client *client, unsigned char *pck, int size, int len)
+{
+	client->data = pck;
+	client->data_length = len;
+	client->remain_bytes = len-size;
+}
+
+void append_client_lack_pck(Client *client, unsigned char *pck, int len)
+{
+	int data_length = client->data_length;
+	int remain_length = client->remain_bytes;
+	//分配空间为之前的长度+本次补丁的长度
+	unsigned char *patch_pck = (char *)malloc(sizeof(char)*((data_length-remain_length)+(len)));
+	//复制之前的数据进来
+	memcpy(patch_pck,client->data,data_length-remain_length);
+	//合并本次数据
+	memcpy(&patch_pck[data_length - remain_length], pck, len);
+	//释放之前数据
+	free(client->data);
+	free(pck);
+	client->data = patch_pck;
+	client->remain_bytes -= len;
+}
+
+
 #else
 
 
@@ -201,10 +288,10 @@ int main(int argc, char* argv[])
 	//if (run_server() == 0)
 	//	return 0;
 
-	unsigned char data[] = { 0x00, 0x04, 0x00, 0x00 };
+	unsigned char data[] = { 0xAB, 0xCD, 0xEF, 0xAB, 0x00, 0x04, 0x00, 0x00 };
 
-	
-	printf("%d\n", char_to_int(data));
+
+	printf("%d\n", get_pck_len(data));
 
 
 	return 0;
