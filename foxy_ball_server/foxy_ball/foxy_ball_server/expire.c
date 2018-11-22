@@ -1,4 +1,5 @@
-﻿#include<time.h>
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include<time.h>
 #include<malloc.h>
 #include<string.h>
 #include"hashmap.h"

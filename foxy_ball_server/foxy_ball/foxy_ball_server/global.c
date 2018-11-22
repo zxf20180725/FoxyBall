@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<malloc.h>
 #include"global.h"
 #include"hashmap.h"

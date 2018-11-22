@@ -7,3 +7,7 @@
 *.vcxproj
 *.dat
 db
+py_foxy_ball/.idea/
+py_foxy_ball/__pycache__/
+*.sdf
+*.opensdf

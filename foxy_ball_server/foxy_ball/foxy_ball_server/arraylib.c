@@ -1,4 +1,5 @@
-﻿#include"arraylib.h"
+﻿#define _CRT_SECURE_NO_WARNINGS
+#include"arraylib.h"
 #include<malloc.h>
 
 
