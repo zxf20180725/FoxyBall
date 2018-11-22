@@ -19,5 +19,7 @@ int get_int32(unsigned char *data, int *len);
 //在数据包中取str(会改变传入的data和len),返回值一定要free
 char * get_str(unsigned char *data, int *len);
 
+//数据包分发(返回1正常 0不正常)
+int dispatch_data(unsigned char *data, int len);
 
 #endif

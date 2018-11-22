@@ -1,6 +1,9 @@
 ﻿#include<malloc.h>
 #include<string.h>
 #include"protocol.h"
+#include"hashmap.h"
+#include"global.h"
+#include"server.h"
 
 int validate_pck(unsigned char *data, int length)
 {
@@ -53,4 +56,28 @@ char * get_str(unsigned char *data, int *len)
 	memcpy(data, &data[4 + str_len], *len - str_len);
 	*len = *len - 4 - str_len;
 	return str;
+}
+
+int dispatch_data(unsigned char *data, int len)
+{
+	//获取协议名称
+	char *protocol_name = get_str(data, &len);
+
+	//添加kv
+	if (strcmp(protocol_name, "set") == 0)
+	{
+		char *key = get_str(data, &len);
+		char *value = get_str(data, &len);
+		int ret = add_data(hash_table, key, value);
+		show_all();
+		free(key);
+		free(value);
+	}
+	else
+	{
+		console_log("接收到了一个不存在的协议！");
+	}
+
+	free(protocol_name);
+	return 1;
 }
