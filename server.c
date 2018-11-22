@@ -206,8 +206,16 @@ static void analysis(unsigned char *data, int length, Client *client)
 			//client->remain_bytes = -1;
 			int length = client->data_length;
 			unsigned char * data = client->data;
+			unsigned char * return_data = 0;
+			int return_len = 0;
 			//分发数据包
-			dispatch_data(data, length);
+			return_data=dispatch_data(data, length, &return_len);
+			//如果需要返回
+			if (return_data != 0)
+			{
+				send(client->socket, return_data, return_len, 0);
+				free(return_data);
+			}
 			free(client->data);
 			client->data = 0;
 			client->data_length = -1;
@@ -230,7 +238,7 @@ DWORD WINAPI client_handler(LPVOID lpParameter)
 	console_log_head();
 	printf("最多可连接%d个客户端，当前已连接%d个客户端\n", MAX_CLIENT_NUMS, client_nums);
 
-	send(client->socket, "hello i am server \n", strlen("hello i am server \n"), 0);
+	//send(client->socket, "hello i am server \n", strlen("hello i am server \n"), 0);
 
 	while (1)
 	{
@@ -254,7 +262,7 @@ DWORD WINAPI client_handler(LPVOID lpParameter)
 			//当ret < 0 说明出现了异常 例如阻塞状态解除，或者读取数据时出现指针错误等。
 			//所以我们这里要主动断开和客户端的链接，然后跳出循环去等待新的连接。
 			console_log_head();
-			printf("在与客户端通信是发生异常 IP = %s PORT = %d \n", inet_ntoa(client->socket_info.sin_addr), client->socket_info.sin_port);
+			printf("客户端异常！ IP = %s PORT = %d \n", inet_ntoa(client->socket_info.sin_addr), client->socket_info.sin_port);
 			closesocket(client->socket);
 			break;
 		}
