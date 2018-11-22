@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+ï»¿#define _CRT_SECURE_NO_WARNINGS
 #include<malloc.h>
 #include"global.h"
 #include"hashmap.h"
@@ -9,15 +9,15 @@ unsigned long memory_amount = 0;
 
 int init_foxy_ball()
 {
-	////³õÊ¼»¯Êý¾Ý¿â¹þÏ£±í
+	////åˆå§‹åŒ–æ•°æ®åº“å“ˆå¸Œè¡¨
 	//hash_table = new_hash_table(1024);
 
-	//´ÓÊý¾Ý¿âÎÄ¼þÖÐ¼ÓÔØhash_table
+	//ä»Žæ•°æ®åº“æ–‡ä»¶ä¸­åŠ è½½hash_table
 	if(!load_hash_table())
-		hash_table = new_hash_table(1024*1024);		//¼ÓÔØÊ§°ÜÔòÖØÐÂ´´½¨hash_table
+		hash_table = new_hash_table(1024*1024);		//åŠ è½½å¤±è´¥åˆ™é‡æ–°åˆ›å»ºhash_table
 
 
-	//³õÊ¼»¯¹ýÆÚkey±í
+	//åˆå§‹åŒ–è¿‡æœŸkeyè¡¨
 	expires_head = (Expires *)malloc(sizeof(Expires));
 	expires_head->entry = 0;
 	expires_head->next = 0;
