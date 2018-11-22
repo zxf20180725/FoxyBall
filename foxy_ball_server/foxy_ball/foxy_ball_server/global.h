@@ -3,8 +3,8 @@
 #include"arraylib.h"
 #include"expire.h"
 
-#define VERSION "0.1.0"
-#define UPDATE_TIME "2018年11月19日 17:26:59"
+#define VERSION "0.5.0"
+#define UPDATE_TIME "2018年11月22日 18:10:02"
 #define AUTHOR "狡猾的皮球"
 
 extern Array *hash_table;				//数据库核心结构
