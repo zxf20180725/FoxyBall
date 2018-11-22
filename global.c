@@ -13,7 +13,7 @@ int init_foxy_ball()
 
 	//从数据库文件中加载hash_table
 	if(!load_hash_table())
-		hash_table = new_hash_table(1024);		//加载失败则重新创建hash_table
+		hash_table = new_hash_table(1024*1024);		//加载失败则重新创建hash_table
 
 
 	//初始化过期key表

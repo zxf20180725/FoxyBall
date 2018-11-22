@@ -1,4 +1,5 @@
 ﻿#include<stdio.h>
+#include <time.h>
 #include"server.h"
 #include"protocol.h"
 
@@ -34,7 +35,9 @@ void append_client_lack_pck(Client *client, unsigned char *pck, int len);				//�
 //启动server
 int run_server()
 {
+	console_log_head();
 	printf("FoxyBall服务端启动中......\n");
+
 	WORD socket_version = MAKEWORD(2, 2);
 	WSADATA wsadata;
 	if (WSAStartup(socket_version, &wsadata) != 0)
@@ -46,7 +49,9 @@ int run_server()
 	//创建socket 并判断是否创建成功
 	if (server_socket == INVALID_SOCKET)
 	{
+		console_log_head();
 		printf("服务端创建socket失败！\n");
+
 		return 0;
 	}
 
@@ -56,16 +61,20 @@ int run_server()
 
 	if (bind(server_socket, (LPSOCKADDR)&server_info, sizeof(server_info)) == SOCKET_ERROR)//绑定
 	{
+		console_log_head();
 		printf("端口绑定异常，请检查%d端口是否被占用！\n", PORT);
+
 		return 0;
 	}
 
 	if (listen(server_socket, 5) == SOCKET_ERROR)		//监听
 	{
+		console_log_head();
 		printf("socket监听失败！\n");
 		return 0;
 	}
 
+	console_log_head();
 	printf("FoxyBall服务启动成功！ 端口：%d\n", PORT);
 
 	while (1)
@@ -88,6 +97,7 @@ int run_server()
 		if (client_nums + 1 > MAX_CLIENT_NUMS)
 		{
 			//send(client_socket, "连接超限制，您已被断开 \n", strlen("连接超限制，您已被断开 \n"), 0);
+			console_log_head();
 			printf("客户端IP：%s PORT：%d连接被拒绝，因为当前连接数已达上限！\n", inet_ntoa(client_info.sin_addr), client_info.sin_port);
 			closesocket(client_socket);
 			continue;
@@ -321,8 +331,35 @@ client->remain_bytes -= len;
 
 #endif
 
+void console_log(char *str)
+{
+	time_t t;
+	struct tm * lt;
+	time(&t);			//获取Unix时间戳。
+	lt = localtime(&t);	//转为时间结构。
+	printf("[%02d-%02d %d:%02d:%02d] %s\n",lt->tm_mon,lt->tm_mday,lt->tm_hour,lt->tm_min,lt->tm_sec,str);
+}
+
+void console_log_head()
+{
+	time_t t;
+	struct tm * lt;
+	time(&t);			//获取Unix时间戳。
+	lt = localtime(&t);	//转为时间结构。
+	printf("[%02d-%02d %d:%02d:%02d] ", lt->tm_mon, lt->tm_mday, lt->tm_hour, lt->tm_min, lt->tm_sec);
+}
+
+
 int main(int argc, char* argv[])
 {
+	console_log("正在加载数据库文件...");
+	if (!init_foxy_ball())
+	{
+		console_log("数据库加载失败！");
+		exit(0);
+	}
+	console_log("数据库加载成功！");
+
 	if (run_server() == 0)
 		return 0;
 	return 0;
