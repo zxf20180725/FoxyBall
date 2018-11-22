@@ -118,8 +118,14 @@ int run_server()
 
 static void analysis(unsigned char *data, int length, Client *client)
 {
-	//printf("客户端（%s:%d）发来数据:%s  数据长度:%d\n", inet_ntoa(client->socket_info.sin_addr), client->socket_info.sin_port, data, length);
-
+	//TODO:该处理粘包流程有严重bug，当包头被缓冲区分割时导致，等以后智商有所提高时再修复
+	//TODO:该处理粘包流程有严重bug，当包头被缓冲区分割时导致，等以后智商有所提高时再修复
+	//TODO:该处理粘包流程有严重bug，当包头被缓冲区分割时导致，等以后智商有所提高时再修复
+	//TODO:该处理粘包流程有严重bug，当包头被缓冲区分割时导致，等以后智商有所提高时再修复
+	//TODO:该处理粘包流程有严重bug，当包头被缓冲区分割时导致，等以后智商有所提高时再修复
+	//TODO:该处理粘包流程有严重bug，当包头被缓冲区分割时导致，等以后智商有所提高时再修复
+	//TODO:该处理粘包流程有严重bug，当包头被缓冲区分割时导致，等以后智商有所提高时再修复
+	//TODO:该处理粘包流程有严重bug，当包头被缓冲区分割时导致，等以后智商有所提高时再修复
 	while (length != 0)
 	{
 		//根据client的数据来判断这次是从头拆包还是接收剩余数据
@@ -154,7 +160,7 @@ static void analysis(unsigned char *data, int length, Client *client)
 				length = 0;
 			}
 		}
-		else if (client->remain_bytes >0)//接收剩余数据
+		else if (client->remain_bytes > 0)//接收剩余数据
 		{
 			//剩余数据在缓冲区范围内
 			if (client->remain_bytes <= length)
@@ -165,7 +171,7 @@ static void analysis(unsigned char *data, int length, Client *client)
 				append_client_lack_pck(client, remain_bytes, client->remain_bytes);
 				//数据前移
 				int remain_len = length - (client->remain_bytes);
-				if (remain_len>0)
+				if (remain_len > 0)
 					memcpy(data, &data[client->remain_bytes], remain_len);
 				length = remain_len;
 			}
@@ -181,13 +187,20 @@ static void analysis(unsigned char *data, int length, Client *client)
 		//解析client中的数据包
 		if (client->remain_bytes == 0)
 		{
-			printf("开头：%x\n", client->data[0]);
-			printf("结尾：%x\n", client->data[client->data_length-1]);
-			printf("长度：%d\n", client->data_length);
-			free(client->data);
-			client->data = 0;
-			client->data_length = -1;
-			client->remain_bytes = -1;
+			//printf("开头：%x\n", client->data[0]);
+			//printf("结尾：%x\n", client->data[client->data_length-1]);
+			//printf("长度：%d\n", client->data_length);
+			//free(client->data);
+			//client->data = 0;
+			//client->data_length = -1;
+			//client->remain_bytes = -1;
+			int length = client->data_length;
+			unsigned char * data = client->data;
+			printf("%d\n", get_int32(data, &length));
+			printf("%d\n", get_int32(data, &length));
+			printf("%s\n", get_str(data, &length));
+			printf("%s\n", get_str(data, &length));
+			printf("%d\n", get_int32(data, &length));
 		}
 	}
 
@@ -258,9 +271,8 @@ void set_client_lack_pck(Client *client, unsigned char *pck, int size, int len)
 {
 	client->data = pck;
 	client->data_length = size;
-	client->remain_bytes = size-len;
+	client->remain_bytes = size - len;
 }
-
 
 void append_client_lack_pck(Client *client, unsigned char *pck, int len)
 {
@@ -270,7 +282,7 @@ void append_client_lack_pck(Client *client, unsigned char *pck, int len)
 	int pck_size = sizeof(char)*(data_length - remain_length + len);
 	unsigned char *patch_pck = (char *)malloc(pck_size);
 	//复制之前的数据进来
-	memcpy(patch_pck,client->data,data_length-remain_length);
+	memcpy(patch_pck, client->data, data_length - remain_length);
 	//合并本次数据
 	memcpy(&patch_pck[data_length - remain_length], pck, len);
 	//释放之前数据
@@ -279,28 +291,30 @@ void append_client_lack_pck(Client *client, unsigned char *pck, int len)
 	client->data = patch_pck;
 	client->remain_bytes -= len;
 }
+
 /*
 void append_client_lack_pck(Client *client, unsigned char *pck, int len)
 {
-	int data_length = client->data_length;
-	int remain_length = client->remain_bytes;
-	//分配空间为之前的长度+本次补丁的长度
-	int pck_size = sizeof(char)*(data_length - remain_length + len);
-	unsigned char *patch_pck = (char *)malloc(pck_size);
-	for (int i = 0; i < pck_size; i++)
-	{
-		if (i < data_length - remain_length)
-			patch_pck[i] = client->data[i];
-		else
-			patch_pck[i] = pck[i - data_length + remain_length];
-	}
-	//释放之前数据
-	free(client->data);
-	free(pck);
-	client->data = patch_pck;
-	client->remain_bytes -= len;
+int data_length = client->data_length;
+int remain_length = client->remain_bytes;
+//分配空间为之前的长度+本次补丁的长度
+int pck_size = sizeof(char)*(data_length - remain_length + len);
+unsigned char *patch_pck = (char *)malloc(pck_size);
+for (int i = 0; i < pck_size; i++)
+{
+if (i < data_length - remain_length)
+patch_pck[i] = client->data[i];
+else
+patch_pck[i] = pck[i - data_length + remain_length];
+}
+//释放之前数据
+free(client->data);
+free(pck);
+client->data = patch_pck;
+client->remain_bytes -= len;
 }
 */
+
 #else
 
 

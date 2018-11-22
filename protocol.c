@@ -33,3 +33,24 @@ int get_pck_len(unsigned char *data)
 	free(pck_len_bytes);
 	return pck_len;
 }
+
+int get_int32(unsigned char *data, int *len)
+{
+	unsigned char int32[4] = { data[0], data[1], data[2], data[3] };
+	//改变源数据
+	memcpy(data, &data[4], *len - 4);
+	*len -= 4;
+	return char_to_int(int32);
+}
+
+char * get_str(unsigned char *data, int *len)
+{
+	unsigned char int32[4] = { data[0], data[1], data[2], data[3] };
+	int str_len = char_to_int(int32);
+	char *str = (char *)malloc(sizeof(char)*str_len);
+	memcpy(str, &data[4], str_len);	//截取字符串
+	//改变源数据
+	memcpy(data, &data[4 + str_len], *len - str_len);
+	*len = *len - 4 - str_len;
+	return str;
+}

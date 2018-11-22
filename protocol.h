@@ -13,4 +13,11 @@ unsigned char *split_bytes(unsigned char *bytes, int start, int len);
 //获取数据包长度
 int get_pck_len(unsigned char *data);
 
+//在数据包中取int32(会改变传入的data和len)
+int get_int32(unsigned char *data, int *len);
+
+//在数据包中取str(会改变传入的data和len),返回值一定要free
+char * get_str(unsigned char *data, int *len);
+
+
 #endif
