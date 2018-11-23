@@ -113,6 +113,10 @@ class FoxyBall:
             self.__return_data['protocol'] = pck_type
             self.__return_data['value'] = p.get_int32()
             self.__signal = 0
+        elif pck_type == 'expire_result':
+            self.__return_data['protocol'] = pck_type
+            self.__return_data['value'] = p.get_int32()
+            self.__signal = 0
 
     def __send_pck(self, pck):
         if self.__state == 1:
@@ -174,6 +178,16 @@ class FoxyBall:
         self.__wait()  # 同步
         return self.__return_data['value']
 
+    def expire_k(self, k, expire):
+        self.__reconnect()
+        p = Protocol()
+        p.add_str("expire")
+        p.add_str(k)
+        p.add_int32(expire)
+        self.__send_pck(p.get_pck_has_head())
+        self.__wait()  # 同步
+        return self.__return_data['value']
+
 
 if __name__ == '__main__':
     fb = FoxyBall()
@@ -203,3 +217,11 @@ if __name__ == '__main__':
                 print('删除成功！')
             else:
                 print('删除失败！请检查是否有已存在的key！')
+        elif cmd == 'expire':
+            k = input('请输入key：')
+            expire = int(input('请输入过期时间：'))
+            ret = fb.expire_k(k, expire)
+            if ret == 1:
+                print('过期时间设置成功！')
+            else:
+                print('设置失败！请检查key是否存在！')

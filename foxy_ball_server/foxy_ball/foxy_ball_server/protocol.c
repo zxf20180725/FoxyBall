@@ -161,10 +161,19 @@ unsigned char *dispatch_data(unsigned char *data, int len, int *return_len)
 		return_pck = set_result("del_result",ret, return_len);
 		free(key);
 	}
+	else if (strcmp(protocol_name, "expire") == 0)
+	{
+		char *key = get_str(data, &len);
+		int expire = get_int32(data, &len);
+		int ret = set_expire(hash_table, expires_head,key,expire);
+		return_pck = set_result("expire_result", ret, return_len);
+		free(key);
+	}
 	else
 	{
 		console_log("接收到了一个不存在的协议！");
 	}
+
 	free(protocol_name);
 
 	//返回要发送给客户端的数据包
