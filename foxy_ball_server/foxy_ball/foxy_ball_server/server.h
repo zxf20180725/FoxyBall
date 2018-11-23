@@ -12,5 +12,8 @@ void console_log(char *str);
 //控制台输出时间头
 void console_log_head();
 
+//输出爱心logo
+void start_logo();
+
 
 #endif

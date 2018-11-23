@@ -78,6 +78,8 @@ int run_server()
 	console_log_head();
 	printf("FoxyBall服务启动成功！ 端口：%d\n", PORT);
 
+	start_logo();
+
 	while (1)
 	{
 		SOCKET client_socket;			//客户端（远程）的socket
@@ -364,6 +366,19 @@ void console_log_head()
 	printf("[%02d-%02d %d:%02d:%02d] ", lt->tm_mon, lt->tm_mday, lt->tm_hour, lt->tm_min, lt->tm_sec);
 }
 
+void start_logo()
+{
+	float y, x, a;
+	for (y = 1.5f; y > -1.5f; y -= 0.1f)
+	{
+		for (x = -1.5f; x < 1.5f; x += 0.05f)
+		{
+			a = x*x + y*y - 1;
+			putchar(a*a*a - x*x*y*y*y <= 0.0f?'*' : ' ');
+		}
+		putchar('\n');
+	}
+}
 
 int main(int argc, char* argv[])
 {
@@ -373,6 +388,7 @@ int main(int argc, char* argv[])
 		console_log("数据库加载失败！");
 		exit(0);
 	}
+	
 	console_log("数据库加载成功！");
 
 	if (run_server() == 0)
