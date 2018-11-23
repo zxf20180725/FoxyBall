@@ -143,9 +143,16 @@ unsigned char *dispatch_data(unsigned char *data, int len,int *return_len)
 		char *key = get_str(data, &len);
 		char *value = get_str(data, &len);
 		int ret = add_data(hash_table, key, value);
-		return_pck = get_kv_result(ret,return_len);
+		return_pck = set_kv_result(ret,return_len);
 		free(key);
 		free(value);
+	}
+	else if (strcmp(protocol_name, "get") == 0)
+	{
+		char *key = get_str(data, &len);
+		char *ret = get_data(hash_table,key);
+		return_pck = get_data_result(ret, return_len);
+		free(key);
 	}
 	else
 	{
@@ -157,10 +164,24 @@ unsigned char *dispatch_data(unsigned char *data, int len,int *return_len)
 	return return_pck;
 }
 
-unsigned char *get_kv_result(int ret,int *len)
+unsigned char *set_kv_result(int ret,int *len)
 {
 	unsigned char *pck=add_str(0, "set_result", len);
 	pck = add_int32(pck, ret, len);
+	pck = add_head(pck, len);
+	return pck;
+}
+
+unsigned char *get_data_result(char *ret, int *len)
+{
+	unsigned char *pck = add_str(0, "get_result", len);
+	if (ret == 0)
+		pck = add_int32(pck, 0, len);
+	else
+	{
+		pck = add_int32(pck, 1, len);
+		pck = add_str(pck, ret, len);
+	}
 	pck = add_head(pck, len);
 	return pck;
 }

@@ -37,7 +37,10 @@ unsigned char *dispatch_data(unsigned char *data, int len, int *return_len);
 /*************组装相关数据包函数*************/
 
 //kv结果,ret=0失败,ret=1成功,len为返回的数据包长度
-unsigned char *get_kv_result(int ret, int *len);
+unsigned char *set_kv_result(int ret, int *len);
+
+//get命令结果
+unsigned char *get_data_result(char *ret,int *len);
 
 /********************************************/
 #endif
