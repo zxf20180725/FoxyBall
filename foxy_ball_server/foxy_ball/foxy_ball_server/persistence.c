@@ -3,16 +3,24 @@
 #include<string.h>
 #include"persistence.h"
 #include"global.h"
+#include"server.h"
 
 int save_hash_table()
 {
 	FILE *file = 0;
 	file = fopen(DB_FILE_PATH, "wb");
+	console_log("开始持久化...");
+
 	if (file == 0)
+	{
+		console_log("持久化失败！db文件可能被占用！");
 		return 0;
+	}
+
 	//文件头4个字节代表array的长度
 	fwrite(&hash_table->n, sizeof(int), 1, file);
-	printf("---文件头:%d\n", hash_table->n);
+
+
 	//遍历hash_table
 	for (int i = 0; i < hash_table->n; i++)
 	{
@@ -34,6 +42,10 @@ int save_hash_table()
 		} while (head = head->next);
 	}
 	fclose(file);
+
+	console_log("持久化成功！");
+
+
 	return 1;
 }
 

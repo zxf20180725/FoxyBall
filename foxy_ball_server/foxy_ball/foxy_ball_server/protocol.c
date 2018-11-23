@@ -5,7 +5,7 @@
 #include"hashmap.h"
 #include"global.h"
 #include"server.h"
-
+#include"persistence.h"
 int validate_pck(unsigned char *data, int length)
 {
 	if (length < 8)
@@ -168,6 +168,11 @@ unsigned char *dispatch_data(unsigned char *data, int len, int *return_len)
 		int ret = set_expire(hash_table, expires_head,key,expire);
 		return_pck = set_result("expire_result", ret, return_len);
 		free(key);
+	}
+	else if (strcmp(protocol_name, "save") == 0)
+	{
+		int ret = save_hash_table();
+		return_pck = set_result("save_result", ret, return_len);
 	}
 	else
 	{

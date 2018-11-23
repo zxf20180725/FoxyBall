@@ -64,6 +64,7 @@ class FoxyBall:
                 thead.setDaemon(True)
                 thead.start()
                 self.__state = 1
+                self.__return_data = dict()
             except:
                 self.__state = 0
                 self.client.close()
@@ -114,6 +115,10 @@ class FoxyBall:
             self.__return_data['value'] = p.get_int32()
             self.__signal = 0
         elif pck_type == 'expire_result':
+            self.__return_data['protocol'] = pck_type
+            self.__return_data['value'] = p.get_int32()
+            self.__signal = 0
+        elif pck_type == 'save_result':
             self.__return_data['protocol'] = pck_type
             self.__return_data['value'] = p.get_int32()
             self.__signal = 0
@@ -188,6 +193,14 @@ class FoxyBall:
         self.__wait()  # 同步
         return self.__return_data['value']
 
+    def save(self):
+        self.__reconnect()
+        p = Protocol()
+        p.add_str("save")
+        self.__send_pck(p.get_pck_has_head())
+        self.__wait()  # 同步
+        return self.__return_data['value']
+
 
 if __name__ == '__main__':
     fb = FoxyBall()
@@ -225,3 +238,9 @@ if __name__ == '__main__':
                 print('过期时间设置成功！')
             else:
                 print('设置失败！请检查key是否存在！')
+        elif cmd == 'save':
+            ret = fb.save()
+            if ret == 1:
+                print('持久化成功！')
+            else:
+                print('持久化失败！')
