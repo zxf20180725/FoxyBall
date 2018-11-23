@@ -109,6 +109,10 @@ class FoxyBall:
             else:
                 self.__return_data['value'] = [state, ]
             self.__signal = 0
+        elif pck_type == 'del_result':
+            self.__return_data['protocol'] = pck_type
+            self.__return_data['value'] = p.get_int32()
+            self.__signal = 0
 
     def __send_pck(self, pck):
         if self.__state == 1:
@@ -161,6 +165,15 @@ class FoxyBall:
             return 0
         return self.__return_data['value'][1][:-1]
 
+    def del_k(self, k):
+        self.__reconnect()
+        p = Protocol()
+        p.add_str("del")
+        p.add_str(k)
+        self.__send_pck(p.get_pck_has_head())
+        self.__wait()  # 同步
+        return self.__return_data['value']
+
 
 if __name__ == '__main__':
     fb = FoxyBall()
@@ -183,3 +196,10 @@ if __name__ == '__main__':
                 print('未找到！')
             else:
                 print(ret)
+        elif cmd == 'del':
+            k = input('请输入key：')
+            ret = fb.del_k(k)
+            if ret == 1:
+                print('删除成功！')
+            else:
+                print('删除失败！请检查是否有已存在的key！')

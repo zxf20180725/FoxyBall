@@ -59,7 +59,7 @@ char * get_str(unsigned char *data, int *len)
 	return str;
 }
 
-unsigned char *add_int32(unsigned char *data,int value,int *len)
+unsigned char *add_int32(unsigned char *data, int value, int *len)
 {
 	//数据包不为空
 	if (data != 0)
@@ -76,7 +76,7 @@ unsigned char *add_int32(unsigned char *data,int value,int *len)
 	}
 	else//数据包为空
 	{
-		unsigned char *new_pck = (char *)malloc(sizeof(char)*4);		//分配一个新的空间
+		unsigned char *new_pck = (char *)malloc(sizeof(char)* 4);		//分配一个新的空间
 		memcpy(new_pck, &value, 4);
 		*len = 4;
 		return new_pck;
@@ -132,26 +132,33 @@ unsigned char *create_pck()
 	return pck;
 }
 
-unsigned char *dispatch_data(unsigned char *data, int len,int *return_len)
+unsigned char *dispatch_data(unsigned char *data, int len, int *return_len)
 {
 	//获取协议名称
 	char *protocol_name = get_str(data, &len);
 	unsigned char *return_pck = 0;
-	//添加kv
+
 	if (strcmp(protocol_name, "set") == 0)
 	{
 		char *key = get_str(data, &len);
 		char *value = get_str(data, &len);
 		int ret = add_data(hash_table, key, value);
-		return_pck = set_kv_result(ret,return_len);
+		return_pck = set_result("set_result",ret, return_len);
 		free(key);
 		free(value);
 	}
 	else if (strcmp(protocol_name, "get") == 0)
 	{
 		char *key = get_str(data, &len);
-		char *ret = get_data(hash_table,key);
+		char *ret = get_data(hash_table, key);
 		return_pck = get_data_result(ret, return_len);
+		free(key);
+	}
+	else if (strcmp(protocol_name, "del") == 0)
+	{
+		char *key = get_str(data, &len);
+		int ret = del_key(hash_table, key);
+		return_pck = set_result("del_result",ret, return_len);
 		free(key);
 	}
 	else
@@ -164,9 +171,9 @@ unsigned char *dispatch_data(unsigned char *data, int len,int *return_len)
 	return return_pck;
 }
 
-unsigned char *set_kv_result(int ret,int *len)
+unsigned char *set_result(char* protocol_name, int ret, int *len)
 {
-	unsigned char *pck=add_str(0, "set_result", len);
+	unsigned char *pck = add_str(0, protocol_name, len);
 	pck = add_int32(pck, ret, len);
 	pck = add_head(pck, len);
 	return pck;
