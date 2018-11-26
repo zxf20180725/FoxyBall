@@ -77,6 +77,7 @@ class FoxyBall:
         while True:
             try:
                 bytes = self.client.recv(4096)
+                print("接收：")
                 print_hex(bytes)
                 # 以包长度切割封包
                 while True:
@@ -138,6 +139,7 @@ class FoxyBall:
 
     def __send_pck(self, pck):
         if self.__state == 1:
+            print("发送：")
             print_hex(pck)
             self.client.sendall(pck)
             self.__signal = 1
