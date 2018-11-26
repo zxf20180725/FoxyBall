@@ -68,6 +68,7 @@ class FoxyBall:
             except:
                 self.__state = 0
                 self.client.close()
+                raise Exception('连接服务器失败！')
 
     def __msg_handler(self):
         """
@@ -140,7 +141,8 @@ class FoxyBall:
             if current_time - last_time >= 3:
                 self.__state = 0
                 self.client.close()
-                raise Exception('等待超时！')
+                self.__reconnect()
+                return True
 
             sleep(0.001)  # 等待1毫秒
 
@@ -204,7 +206,7 @@ class FoxyBall:
 
 if __name__ == '__main__':
     fb = FoxyBall()
-    fb.connect('127.0.0.1')
+    fb.connect('120.78.145.93')
 
     while True:
         cmd = input('请输入命令：')
