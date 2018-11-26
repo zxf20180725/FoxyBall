@@ -123,6 +123,10 @@ class FoxyBall:
             self.__return_data['protocol'] = pck_type
             self.__return_data['value'] = p.get_int32()
             self.__signal = 0
+        elif pck_type == 'ttl_result':
+            self.__return_data['protocol'] = pck_type
+            self.__return_data['value'] = p.get_int32()
+            self.__signal = 0
 
     def __send_pck(self, pck):
         if self.__state == 1:
@@ -195,6 +199,15 @@ class FoxyBall:
         self.__wait()  # 同步
         return self.__return_data['value']
 
+    def ttl(self, k):
+        self.__reconnect()
+        p = Protocol()
+        p.add_str("ttl")
+        p.add_str(k)
+        self.__send_pck(p.get_pck_has_head())
+        self.__wait()  # 同步
+        return self.__return_data['value']
+
     def save(self):
         self.__reconnect()
         p = Protocol()
@@ -206,8 +219,8 @@ class FoxyBall:
 
 if __name__ == '__main__':
     fb = FoxyBall()
-    fb.connect('120.78.145.93')
-
+    # fb.connect('120.78.145.93')
+    fb.connect('127.0.0.1')
     while True:
         cmd = input('请输入命令：')
         if cmd == 'set':
@@ -246,3 +259,10 @@ if __name__ == '__main__':
                 print('持久化成功！')
             else:
                 print('持久化失败！')
+        elif cmd == 'ttl':
+            k = input('请输入key：')
+            ret = fb.ttl(k)
+            if ret == 0:
+                print('未找到该key的过期时间！')
+            else:
+                print('过期时间：%d 秒' % ret)

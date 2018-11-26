@@ -42,5 +42,9 @@ unsigned char *set_result(char* protocol_name, int ret, int *len);
 //get命令结果
 unsigned char *get_data_result(char *ret,int *len);
 
+//ttl命令结果
+unsigned char *ttl_result(int ret, int *len);
+
+
 /********************************************/
 #endif

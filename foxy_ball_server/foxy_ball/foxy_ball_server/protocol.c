@@ -174,6 +174,13 @@ unsigned char *dispatch_data(unsigned char *data, int len, int *return_len)
 		int ret = save_hash_table();
 		return_pck = set_result("save_result", ret, return_len);
 	}
+	else if (strcmp(protocol_name, "ttl") == 0)
+	{
+		char *key = get_str(data, &len);
+		int ret = get_expire(hash_table, expires_head, key);
+		return_pck = ttl_result(ret, return_len);
+		free(key);
+	}
 	else
 	{
 		console_log("接收到了一个不存在的协议！");
@@ -203,6 +210,14 @@ unsigned char *get_data_result(char *ret, int *len)
 		pck = add_int32(pck, 1, len);
 		pck = add_str(pck, ret, len);
 	}
+	pck = add_head(pck, len);
+	return pck;
+}
+
+unsigned char *ttl_result(int ret, int *len)
+{
+	unsigned char *pck = add_str(0, "ttl_result", len);
+	pck = add_int32(pck, ret, len);
 	pck = add_head(pck, len);
 	return pck;
 }
