@@ -181,6 +181,15 @@ unsigned char *dispatch_data(unsigned char *data, int len, int *return_len)
 		return_pck = ttl_result(ret, return_len);
 		free(key);
 	}
+	else if (strcmp(protocol_name, "exists") == 0)
+	{
+		char *key = get_str(data, &len);
+		int ret = exist_key(hash_table,key);
+		if (ret != 0)
+			ret = 1;
+		return_pck = set_result("exists_result", ret,return_len);
+		free(key);
+	}
 	else
 	{
 		console_log("接收到了一个不存在的协议！");

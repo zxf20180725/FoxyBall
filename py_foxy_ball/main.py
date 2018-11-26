@@ -127,9 +127,14 @@ class FoxyBall:
             self.__return_data['protocol'] = pck_type
             self.__return_data['value'] = p.get_int32()
             self.__signal = 0
+        elif pck_type == 'exists_result':
+            self.__return_data['protocol'] = pck_type
+            self.__return_data['value'] = p.get_int32()
+            self.__signal = 0
 
     def __send_pck(self, pck):
         if self.__state == 1:
+            print_hex(pck)
             self.client.sendall(pck)
             self.__signal = 1
 
@@ -208,6 +213,15 @@ class FoxyBall:
         self.__wait()  # 同步
         return self.__return_data['value']
 
+    def exists(self, k):
+        self.__reconnect()
+        p = Protocol()
+        p.add_str("exists")
+        p.add_str(k)
+        self.__send_pck(p.get_pck_has_head())
+        self.__wait()  # 同步
+        return self.__return_data['value']
+
     def save(self):
         self.__reconnect()
         p = Protocol()
@@ -266,3 +280,10 @@ if __name__ == '__main__':
                 print('未找到该key的过期时间！')
             else:
                 print('过期时间：%d 秒' % ret)
+        elif cmd == 'exists':
+            k = input('请输入key：')
+            ret = fb.exists(k)
+            if ret == 0:
+                print("key:" + k + " 不存在！")
+            else:
+                print("key:" + k + " 存在！")
