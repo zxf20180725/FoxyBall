@@ -132,6 +132,7 @@ unsigned char *create_pck()
 	return pck;
 }
 
+//分发数据包
 unsigned char *dispatch_data(unsigned char *data, int len, int *return_len)
 {
 	//获取协议名称
@@ -189,6 +190,11 @@ unsigned char *dispatch_data(unsigned char *data, int len, int *return_len)
 			ret = 1;
 		return_pck = set_result("exists_result", ret,return_len);
 		free(key);
+	}
+	else if (strcmp(protocol_name, "memory") == 0)
+	{
+		int ret = memory_amount;
+		return_pck = set_result("memory_result", ret, return_len);
 	}
 	else
 	{

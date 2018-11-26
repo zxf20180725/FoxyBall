@@ -71,9 +71,3 @@ class Protocol:
 def print_hex(bytes):
     l = [hex(int(i)) for i in bytes]
     print(" ".join(l))
-
-
-p = Protocol()
-p.add_str("赵雄飞")
-
-print_hex(p.get_pck_not_head())

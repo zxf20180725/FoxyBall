@@ -131,6 +131,10 @@ class FoxyBall:
             self.__return_data['protocol'] = pck_type
             self.__return_data['value'] = p.get_int32()
             self.__signal = 0
+        elif pck_type == 'memory_result':
+            self.__return_data['protocol'] = pck_type
+            self.__return_data['value'] = p.get_int32()
+            self.__signal = 0
 
     def __send_pck(self, pck):
         if self.__state == 1:
@@ -230,6 +234,14 @@ class FoxyBall:
         self.__wait()  # 同步
         return self.__return_data['value']
 
+    def memory(self):
+        self.__reconnect()
+        p = Protocol()
+        p.add_str("memory")
+        self.__send_pck(p.get_pck_has_head())
+        self.__wait()  # 同步
+        return self.__return_data['value']
+
 
 if __name__ == '__main__':
     fb = FoxyBall()
@@ -287,3 +299,6 @@ if __name__ == '__main__':
                 print("key:" + k + " 不存在！")
             else:
                 print("key:" + k + " 存在！")
+        elif cmd == 'memory':
+            ret = fb.memory()
+            print("已使用内存：%d byte" % ret)
