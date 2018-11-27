@@ -1,4 +1,4 @@
-# FoxyBall
+# FoxyBall（目前正在开发中，请勿用于实际项目）
 ## 简介
 FoxyBall是用C语言开发的一款nosql内存数据库，并且支持Linux和Windows操作系统。  
 FoxyBall服务采用C/S架构，目前有python的客户端和windows、linux的服务端。  
