@@ -65,9 +65,10 @@ class FoxyBall:
                 thead.start()
                 self.__state = 1
                 self.__return_data = dict()
-            except:
+            except Exception as e:
                 self.__state = 0
                 self.client.close()
+                print(e)
                 raise Exception('连接服务器失败！')
 
     def __msg_handler(self):
@@ -247,8 +248,8 @@ class FoxyBall:
 
 if __name__ == '__main__':
     fb = FoxyBall()
-    # fb.connect('120.78.145.93')
-    fb.connect('127.0.0.1')
+    fb.connect('120.78.145.93')
+    # fb.connect('127.0.0.1')
     while True:
         cmd = input('请输入命令：')
         if cmd == 'set':

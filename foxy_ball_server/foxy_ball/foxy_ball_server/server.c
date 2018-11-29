@@ -212,7 +212,7 @@ static void analysis(unsigned char *data, int length, Client *client)
 			unsigned char * return_data = 0;
 			int return_len = 0;
 			//分发数据包
-			return_data=dispatch_data(data, length, &return_len);
+			return_data = dispatch_data(data, length, &return_len);
 			//如果需要返回
 			if (return_data != 0)
 			{
@@ -354,7 +354,7 @@ void console_log(char *str)
 	struct tm * lt;
 	time(&t);			//获取Unix时间戳。
 	lt = localtime(&t);	//转为时间结构。
-	printf("[%02d-%02d %d:%02d:%02d] %s\n",lt->tm_mon,lt->tm_mday,lt->tm_hour,lt->tm_min,lt->tm_sec,str);
+	printf("[%02d-%02d %d:%02d:%02d] %s\n", lt->tm_mon + 1, lt->tm_mday, lt->tm_hour, lt->tm_min, lt->tm_sec, str);
 }
 
 void console_log_head()
@@ -363,7 +363,7 @@ void console_log_head()
 	struct tm * lt;
 	time(&t);			//获取Unix时间戳。
 	lt = localtime(&t);	//转为时间结构。
-	printf("[%02d-%02d %d:%02d:%02d] ", lt->tm_mon, lt->tm_mday, lt->tm_hour, lt->tm_min, lt->tm_sec);
+	printf("[%02d-%02d %d:%02d:%02d] ", lt->tm_mon + 1, lt->tm_mday, lt->tm_hour, lt->tm_min, lt->tm_sec);
 }
 
 void start_logo()
@@ -374,7 +374,7 @@ void start_logo()
 		for (x = -1.5f; x < 1.5f; x += 0.05f)
 		{
 			a = x*x + y*y - 1;
-			putchar(a*a*a - x*x*y*y*y <= 0.0f?'*' : ' ');
+			putchar(a*a*a - x*x*y*y*y <= 0.0f ? '*' : ' ');
 		}
 		putchar('\n');
 	}
@@ -388,7 +388,7 @@ int main(int argc, char* argv[])
 		console_log("数据库加载失败！");
 		exit(0);
 	}
-	
+
 	console_log("数据库加载成功！");
 
 	if (run_server() == 0)
