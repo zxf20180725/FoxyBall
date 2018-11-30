@@ -5,6 +5,7 @@
 #include"global.h"
 #include"command_parser.h"
 #include"protocol.h"
+
 /*
 int main()
 {
@@ -39,4 +40,3 @@ int main()
 	return 0;
 }
 */
-

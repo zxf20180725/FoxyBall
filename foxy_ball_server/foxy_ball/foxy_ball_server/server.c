@@ -6,7 +6,7 @@
 
 static int client_nums = 0;			//当前连接服务器的客户端的个数
 
-#if ((defined _WIN32) || (defined _WIN64))		
+#ifdef _WIN32	
 
 #include <winsock2.h>
 #include <windows.h>  
